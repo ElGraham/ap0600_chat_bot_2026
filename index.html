@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<!--
+=====================================================================
+ AP0600 Forensic Research Project - Module Assistant (FAQ chatbot)
+ One self-contained file: HTML + CSS + JavaScript. No server, no API
+ key, and no student data leaves the browser.
+
+ Built from the AP0600 Module Guide and the Comp001 (Pitch), Comp002
+ (Poster) and Comp003 (Dissertation report and supervisor mark) assessment
+ briefs and rubrics, plus the shared University content (ARTA 2026/27,
+ Student Portal topics, student AI guidance, AI declaration and evidence
+ log, 2026-27 academic calendar).
+
+ The script near the bottom has three parts:
+   PART 1  SETTINGS ............ module code, tutor, admin code, options
+   PART 2  MODULE-SPECIFIC ..... deadlines, events and AP0600's own answers
+   PART 3  SHARED CONTENT ...... University regulations, portal, AI guidance
+
+ SECURITY NOTE: the admin code is checked in the browser, so it is a
+ convenience lock for the maintenance panel, not real security. Never
+ store anything confidential in this file.
+=====================================================================
+-->
+<html lang="en-GB" data-theme="light" data-font="standard">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AP0600 Forensic Research Project – Module Assistant</title>
+<meta name="description" content="Frequently asked questions for AP0600 Forensic Research Project.">
+<style>
+/* Fonts: the choices offered are the sans serif fonts recommended in the British Dyslexia Association's Dyslexia Style Guide.
+   Open Sans is loaded from Google Fonts when CONFIG.LOAD_WEB_FONTS is true; the others use fonts installed on the student's device. */
+
+:root{
+  --scale:1; --lh:1.55; --ls:0em; --ws:0em;
+  --ff:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --bg:#F2F5FA; --surface:#FFFFFF; --surface2:#E9EEF7; --text:#14213D; --muted:#44526B;
+  --primary:#1D4E9E; --on-primary:#FFFFFF; --border:#B9C4D8; --link:#1D4E9E; --focus:#C2410C;
+  --hero-bg:#14213D; --hero-text:#FFFFFF; --hero-muted:#C9D6EE; --user-bg:#1D4E9E; --user-text:#FFFFFF;
+  --peak-op:.85; --bw:1px;
+}
+html[data-theme="dark"]{--bg:#0E1420;--surface:#172033;--surface2:#1F2B43;--text:#E8EEF9;--muted:#AEBBD3;--primary:#8DB8FF;--on-primary:#0A1220;--border:#3C4A66;--link:#9CC3FF;--focus:#FFC44D;--hero-bg:#0A0F19;--hero-text:#FFFFFF;--hero-muted:#B8C6E0;--user-bg:#2B4C86;--user-text:#FFFFFF;}
+html[data-theme="hcwhite"]{--bg:#FFFFFF;--surface:#FFFFFF;--surface2:#EFEFEF;--text:#000000;--muted:#000000;--primary:#0000CC;--on-primary:#FFFFFF;--border:#000000;--link:#0000CC;--focus:#D40000;--hero-bg:#000000;--hero-text:#FFFFFF;--hero-muted:#FFFFFF;--user-bg:#000000;--user-text:#FFFFFF;--bw:2px;--peak-op:.5;}
+html[data-theme="hcblack"]{--bg:#000000;--surface:#000000;--surface2:#141414;--text:#FFFFFF;--muted:#FFFFFF;--primary:#FFD400;--on-primary:#000000;--border:#FFFFFF;--link:#66CCFF;--focus:#FFD400;--hero-bg:#000000;--hero-text:#FFFFFF;--hero-muted:#FFFFFF;--user-bg:#FFFFFF;--user-text:#000000;--bw:2px;--peak-op:.5;}
+html[data-theme="yellowblack"]{--bg:#000000;--surface:#000000;--surface2:#1A1A00;--text:#FFE600;--muted:#FFE600;--primary:#FFE600;--on-primary:#000000;--border:#FFE600;--link:#FFE600;--focus:#00FFFF;--hero-bg:#000000;--hero-text:#FFE600;--hero-muted:#FFE600;--user-bg:#FFE600;--user-text:#000000;--bw:2px;--peak-op:.45;}
+html[data-theme="cream"]{--bg:#FAF0CD;--surface:#FFF9E3;--surface2:#F3E7BD;--text:#262626;--muted:#4A4433;--primary:#1B4F72;--on-primary:#FFFFFF;--border:#B9A566;--link:#1B4F72;--focus:#8A3B00;--hero-bg:#EAD9A0;--hero-text:#262626;--hero-muted:#3F3A2A;--user-bg:#1B4F72;--user-text:#FFFFFF;--peak-op:.75;}
+html[data-theme="blue"]{--bg:#DCEBFA;--surface:#EAF3FC;--surface2:#C9DFF5;--text:#0B2540;--muted:#23415F;--primary:#0B4F8A;--on-primary:#FFFFFF;--border:#6F9BC8;--link:#0B4F8A;--focus:#7A2E00;--hero-bg:#B7D3F0;--hero-text:#0B2540;--hero-muted:#173A5E;--user-bg:#0B4F8A;--user-text:#FFFFFF;--peak-op:.75;}
+
+html[data-font="opensans"]{--ff:"Open Sans","Segoe UI",Arial,sans-serif;}
+html[data-font="arial"]{--ff:Arial,"Helvetica Neue",Helvetica,sans-serif;}
+html[data-font="verdana"]{--ff:Verdana,Geneva,Tahoma,sans-serif;}
+html[data-font="tahoma"]{--ff:Tahoma,Verdana,Geneva,sans-serif;}
+html[data-font="trebuchet"]{--ff:"Trebuchet MS","Lucida Grande","Lucida Sans Unicode",sans-serif;}
+html[data-font="calibri"]{--ff:Calibri,Carlito,"Segoe UI",Arial,sans-serif;}
+html[data-font="centurygothic"]{--ff:"Century Gothic","URW Gothic","Avant Garde",Arial,sans-serif;}
+html[data-font="comic"]{--ff:"Comic Sans MS","Comic Neue","Chalkboard SE","Marker Felt",Verdana,sans-serif;}
+html[data-spacing="wide"]{--lh:1.8;--ls:.04em;--ws:.12em;}
+html[data-spacing="wider"]{--lh:2.05;--ls:.08em;--ws:.2em;}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{font-size:calc(100% * var(--scale));-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--ff);line-height:var(--lh);letter-spacing:var(--ls);word-spacing:var(--ws);}
+button,input,select,textarea{font:inherit;letter-spacing:inherit;word-spacing:inherit;color:inherit}
+a{color:var(--link);text-underline-offset:.15em}
+a:hover{text-decoration-thickness:.15em}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.sr-only{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:.5rem;top:-4rem;background:var(--primary);color:var(--on-primary);padding:.6rem 1rem;border-radius:.4rem;z-index:50;font-weight:700}
+.skip:focus{top:.5rem}
+.wrap{width:min(72rem,100% - 2rem);margin-inline:auto}
+
+/* ---------- hero ---------- */
+.hero{background:var(--hero-bg);color:var(--hero-text);position:relative;overflow:hidden;border-bottom:var(--bw) solid var(--border)}
+.hero .wrap{position:relative;z-index:1;padding:1.6rem 0 5.2rem}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:2rem}
+.uni{margin:0;font-weight:600;color:var(--hero-muted);font-size:.95rem}
+.hero .code{margin:0;font-size:clamp(1rem,.8rem + 1vw,1.4rem);font-weight:700;color:var(--hero-muted);letter-spacing:.06em}
+.hero h1{margin:.1rem 0 1rem;font-size:clamp(1.9rem,1.2rem + 3.2vw,3.5rem);line-height:1.1;font-weight:700;max-width:22ch}
+.tutor{margin:0 0 1rem;font-size:1.15rem}
+.tutor .role{display:inline-block;margin-right:.6rem;padding:.1rem .7rem;border:var(--bw) solid currentColor;border-radius:99px;font-size:.9rem;font-weight:700}
+.tutor .name{font-weight:700}
+.lede{margin:0;max-width:60ch;color:var(--hero-muted)}
+.peaks{color:var(--hero-muted);position:absolute;left:0;right:0;bottom:0;width:100%;height:4.6rem;opacity:var(--peak-op);pointer-events:none}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-radius:.55rem;border:var(--bw) solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-weight:600;min-height:2.75rem}
+.btn:hover{background:var(--surface2)}
+.btn.primary{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--hero-text);border-color:var(--hero-text)}
+.btn.ghost:hover{background:rgba(255,255,255,.14)}
+html[data-theme="cream"] .btn.ghost:hover,html[data-theme="blue"] .btn.ghost:hover{background:rgba(0,0,0,.08)}
+.btn[aria-expanded="true"]{outline:2px solid currentColor;outline-offset:2px}
+
+/* ---------- announcement ---------- */
+.banner{background:var(--surface2);border-bottom:var(--bw) solid var(--border);padding:.7rem 0;font-weight:600}
+.banner[hidden]{display:none}
+
+/* ---------- accessibility panel ---------- */
+.a11y{background:var(--surface);border-bottom:var(--bw) solid var(--border)}
+.a11y[hidden]{display:none}
+.a11y .wrap{padding:1.2rem 0 1.5rem}
+.a11y h2{margin:0 0 .3rem;font-size:1.3rem}
+.a11y .hint{margin:0 0 1.1rem;color:var(--muted)}
+.a11y-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr));gap:1.2rem 1.6rem}
+fieldset{border:var(--bw) solid var(--border);border-radius:.7rem;margin:0;padding:.8rem 1rem 1rem;min-width:0}
+legend{font-weight:700;padding:0 .4rem}
+.optrow{display:flex;flex-wrap:wrap;gap:.5rem}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt label{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .8rem;border:var(--bw) solid var(--border);border-radius:.5rem;cursor:pointer;background:var(--bg);min-height:2.6rem}
+.opt input:checked+label{border:3px solid var(--primary);padding:calc(.45rem - 2px) calc(.8rem - 2px);font-weight:700}
+.opt input:checked+label::after{content:"✓";font-weight:700}
+.opt input:focus-visible+label{outline:3px solid var(--focus);outline-offset:2px}
+.swatch{display:inline-block;width:1.5rem;height:1.5rem;border-radius:.3rem;border:2px solid #888;text-align:center;line-height:1.25rem;font-weight:700;font-size:.85rem;letter-spacing:0}
+.sizeRow{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.sizeRow input[type=range]{flex:1 1 8rem;min-width:7rem;accent-color:var(--primary);height:2rem}
+.checks{display:grid;gap:.6rem}
+.checks label{display:flex;gap:.6rem;align-items:flex-start;cursor:pointer}
+.checks input{width:1.35rem;height:1.35rem;margin-top:.2rem;accent-color:var(--primary);flex:none}
+
+/* ---------- main layout ---------- */
+main{padding:1.6rem 0 2rem}
+.layout{display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-start}
+.chat{flex:2 1 28rem;min-width:0;background:var(--surface);border:var(--bw) solid var(--border);border-radius:1rem;overflow:hidden;display:flex;flex-direction:column}
+.chat-head{padding:.9rem 1.1rem;border-bottom:var(--bw) solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap}
+.chat-head h2{margin:0;font-size:1.15rem}
+.log{position:relative;padding:1rem 1.1rem;min-height:20rem;max-height:min(68vh,44rem);overflow-y:auto;display:flex;flex-direction:column;gap:1rem;scroll-behavior:auto}
+.msg{max-width:min(100%,46rem);display:flex;flex-direction:column;gap:.25rem}
+.msg .who{margin:0;font-size:.85rem;font-weight:700;color:var(--muted)}
+.msg.user{align-self:flex-end;align-items:flex-end}
+.bubble{padding:.75rem 1rem;border-radius:.9rem;border:var(--bw) solid var(--border);background:var(--bg);overflow-wrap:anywhere}
+.msg.user .bubble{background:var(--user-bg);color:var(--user-text);border-color:var(--user-bg);border-bottom-right-radius:.25rem}
+.msg.bot .bubble{border-bottom-left-radius:.25rem}
+.bubble p{margin:.4rem 0}.bubble p:first-child{margin-top:0}.bubble p:last-child{margin-bottom:0}
+.bubble ul,.bubble ol{margin:.4rem 0;padding-left:1.3rem}.bubble li{margin:.2rem 0}
+.bubble h3{margin:.2rem 0 .4rem;font-size:1.05rem}
+.bubble strong{font-weight:700}
+.tblwrap{overflow-x:auto;margin:.5rem 0;border:var(--bw) solid var(--border);border-radius:.5rem}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+table.wide{min-width:46rem}
+th,td{padding:.45rem .6rem;border-bottom:var(--bw) solid var(--border);text-align:left;vertical-align:top}
+th{background:var(--surface2);font-weight:700}
+tr:last-child td{border-bottom:0}
+.src{font-size:.82rem;color:var(--muted)!important;margin-top:.6rem!important}
+.note{border-left:.3rem solid var(--primary);padding:.2rem .7rem;background:var(--surface2);border-radius:.3rem;margin:.5rem 0!important}
+.msgtools{display:flex;gap:.4rem;flex-wrap:wrap}
+.tool{background:none;border:0;padding:.2rem .3rem;cursor:pointer;color:var(--link);text-decoration:underline;font-size:.85rem;min-height:1.8rem}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.3rem}
+.chip{padding:.4rem .8rem;border-radius:99px;border:var(--bw) solid var(--primary);background:var(--surface);color:var(--text);cursor:pointer;font-size:.92rem;text-align:left;min-height:2.4rem}
+.chip:hover{background:var(--primary);color:var(--on-primary)}
+.chips-label{margin:.5rem 0 0;font-size:.85rem;font-weight:700;color:var(--muted)}
+.composer{border-top:var(--bw) solid var(--border);padding:.9rem 1.1rem;background:var(--surface2)}
+.composer form{display:flex;gap:.6rem;flex-wrap:wrap}
+.composer label{flex:1 0 100%;font-weight:700;font-size:.95rem}
+.composer input[type=text]{flex:1 1 12rem;min-width:0;padding:.65rem .85rem;border:var(--bw) solid var(--border);border-radius:.55rem;background:var(--surface);min-height:2.9rem}
+.composer .fine{flex:1 0 100%;margin:.2rem 0 0;font-size:.82rem;color:var(--muted)}
+.typing{font-style:italic;color:var(--muted)}
+
+/* ---------- sidebar ---------- */
+.side{flex:1 1 18rem;min-width:0;display:grid;gap:1.1rem}
+.card{background:var(--surface);border:var(--bw) solid var(--border);border-radius:1rem;padding:1rem 1.1rem}
+.card h2{margin:0 0 .6rem;font-size:1.1rem}
+.card ul{list-style:none;margin:0;padding:0;display:grid;gap:.4rem}
+.linkbtn{background:none;border:0;padding:.2rem 0;cursor:pointer;text-align:left;color:var(--link);text-decoration:underline;text-underline-offset:.15em;min-height:2rem}
+details.topic{border-top:var(--bw) solid var(--border);padding:.2rem 0}
+details.topic:first-of-type{border-top:0}
+details.topic summary{cursor:pointer;font-weight:700;padding:.5rem 0;min-height:2.4rem}
+details.topic ul{padding:0 0 .6rem .3rem}
+.contactcard p{margin:.25rem 0}
+
+footer{border-top:var(--bw) solid var(--border);padding:1.2rem 0 2rem;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:flex-start}
+footer p{margin:0;max-width:60ch}
+
+/* ---------- admin dialog ---------- */
+dialog{width:min(52rem,calc(100% - 1.5rem));max-height:calc(100dvh - 1.5rem);padding:0;border:var(--bw) solid var(--border);border-radius:1rem;background:var(--surface);color:var(--text)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.dlg-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.9rem 1.2rem;border-bottom:var(--bw) solid var(--border);position:sticky;top:0;background:var(--surface);z-index:2}
+.dlg-head h2{margin:0;font-size:1.25rem}
+.dlg-body{padding:1rem 1.2rem 1.4rem;display:grid;gap:1.3rem}
+#adminPanel{display:grid;gap:1.4rem}
+.dlg-body h3{margin:0 0 .5rem;font-size:1.1rem}
+.field{display:grid;gap:.25rem;margin-bottom:.7rem}
+.field label{font-weight:700}
+.field input,.field textarea,.field select{padding:.55rem .7rem;border:var(--bw) solid var(--border);border-radius:.5rem;background:var(--bg);width:100%}
+.field textarea{min-height:7rem;resize:vertical}
+.field small{color:var(--muted)}
+.row{display:flex;gap:.6rem;flex-wrap:wrap}
+.msgline{margin:.4rem 0 0;font-weight:600}
+.msgline.err{color:var(--text);border-left:.3rem solid var(--focus);padding-left:.6rem}
+.faqlist{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}
+.faqlist li{border:var(--bw) solid var(--border);border-radius:.6rem;padding:.6rem .8rem;display:grid;gap:.4rem}
+.faqlist .q{font-weight:700}
+.warn{border:var(--bw) solid var(--focus);border-left-width:.4rem;border-radius:.5rem;padding:.5rem .8rem;background:var(--surface2)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html[data-motion="off"] *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media print{.a11y,.composer,.side,dialog,.hero-top .btn{display:none!important}.log{max-height:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#chat-heading">Skip to the chat</a>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <p class="uni">Northumbria University</p>
+      <button type="button" class="btn ghost" id="a11yBtn" aria-expanded="false" aria-controls="a11yPanel">
+        <span aria-hidden="true">Aa</span> Accessibility settings
+      </button>
+    </div>
+    <p class="code"><span data-cfg="MODULE_CODE">AP0600</span> &nbsp;<span data-cfg="ACADEMIC_YEAR">2026–27</span></p>
+    <h1 data-cfg="MODULE_TITLE">Forensic Research Project</h1>
+    <p class="tutor"><span class="role" data-cfg="TUTOR_ROLE">Module Tutor</span><span class="name" data-cfg="TUTOR_NAME">Dr Kate Randall</span></p>
+    <p class="lede">Ask about sessions, labs, coursework, deadlines, marking and the rules on using AI. Answers come from your module documents.</p>
+  </div>
+  <svg class="peaks" id="peaks" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
+</header>
+
+<div class="banner" id="banner" role="status" hidden><div class="wrap" id="bannerText"></div></div>
+
+<section class="a11y" id="a11yPanel" aria-labelledby="a11yTitle" hidden>
+  <div class="wrap">
+    <h2 id="a11yTitle">Accessibility settings</h2>
+    <p class="hint">Changes apply straight away and are remembered on this device where your browser allows it.</p>
+    <div class="a11y-grid">
+      <fieldset>
+        <legend>Text size</legend>
+        <div class="sizeRow">
+          <button type="button" class="btn" id="sizeDown" aria-label="Make text smaller">A−</button>
+          <input type="range" id="sizeRange" min="90" max="200" step="10" value="100" aria-label="Text size percentage" aria-describedby="sizeOut">
+          <button type="button" class="btn" id="sizeUp" aria-label="Make text larger">A+</button>
+        </div>
+        <p id="sizeOut" style="margin:.5rem 0 0">Text size: 100%</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Font</legend>
+        <div class="optrow" id="fontOpts"></div>
+        <p class="hint" style="margin:.7rem 0 0;font-size:.88rem">These are sans serif fonts recommended in the British Dyslexia Association’s Dyslexia Style Guide. All except Open Sans use fonts installed on your device, so they may look different on some devices.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Colours and contrast</legend>
+        <div class="optrow" id="themeOpts"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Spacing</legend>
+        <div class="optrow" id="spacingOpts"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Other options</legend>
+        <div class="checks">
+          <label><input type="checkbox" id="optMotion"><span>Reduce motion and animation</span></label>
+          <label><input type="checkbox" id="optSpeak"><span>Read new answers aloud automatically</span></label>
+        </div>
+      </fieldset>
+    </div>
+    <div class="row" style="margin-top:1rem">
+      <button type="button" class="btn" id="a11yReset">Reset to defaults</button>
+      <button type="button" class="btn primary" id="a11yClose">Done</button>
+    </div>
+  </div>
+</section>
+
+<main id="main">
+  <div class="wrap layout">
+    <section class="chat" aria-labelledby="chat-heading">
+      <div class="chat-head">
+        <h2 id="chat-heading" tabindex="-1">Module assistant</h2>
+        <button type="button" class="btn" id="clearBtn">Start again</button>
+      </div>
+      <div class="log" id="log" role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation" tabindex="0"></div>
+      <div class="composer">
+        <form id="askForm" autocomplete="off">
+          <label for="askInput">Type your question about <span data-cfg="MODULE_CODE">AP0600</span></label>
+          <input type="text" id="askInput" name="q" maxlength="300" placeholder="For example: When is the coursework due?" enterkeyhint="send">
+          <button type="submit" class="btn primary">Ask</button>
+          <p class="fine">This is an FAQ assistant, not a person and not generative AI. It cannot see your personal timetable or marks.</p>
+        </form>
+      </div>
+    </section>
+
+    <aside class="side" aria-label="Help and topics">
+      <section class="card">
+        <h2>Popular questions</h2>
+        <ul id="popular"></ul>
+      </section>
+      <section class="card">
+        <h2>Browse by topic</h2>
+        <div id="topics"></div>
+      </section>
+      <section class="card">
+        <h2>Student Portal</h2>
+        <p style="margin:.25rem 0 .5rem">University-wide policies, extensions, PECs, appeals and more.</p>
+        <p style="margin:0"><a id="portalSide" href="#" target="_blank" rel="noopener noreferrer">Open the Student Portal</a></p>
+      </section>
+      <section class="card contactcard">
+        <h2>Need a person?</h2>
+        <p><strong data-cfg="TUTOR_ROLE">Module Tutor</strong>: <span data-cfg="TUTOR_NAME">Dr Kate Randall</span></p>
+        <p>Office: <span data-cfg="TUTOR_OFFICE">ELA 107</span></p>
+        <p><a id="mailLink" href="#"><span data-cfg="TUTOR_EMAIL">kate.randall@northumbria.ac.uk</span></a></p>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Built from the module documents (module guide, teaching schedule and assessment brief), the AI declaration and evidence log, the 2026–27 academic calendar, the University's student AI guidance and the Academic Regulations for Taught Awards (ARTA) 2026/27. If this page and an official document ever disagree, the official document and your personal timetable take priority. Last updated <span data-cfg="LAST_UPDATED"></span>.</p>
+    <button type="button" class="btn" id="adminBtn">Admin</button>
+  </div>
+</footer>
+
+<!-- ============ ADMIN DIALOG ============ -->
+<dialog id="adminDlg" aria-labelledby="adminTitle">
+  <div class="dlg-head">
+    <h2 id="adminTitle">Admin</h2>
+    <button type="button" class="btn" id="adminClose">Close</button>
+  </div>
+  <div class="dlg-body">
+    <form id="codeForm" autocomplete="off">
+      <div class="field">
+        <label for="codeInput">Admin code</label>
+        <input type="password" id="codeInput" autocomplete="off">
+      </div>
+      <button type="submit" class="btn primary">Unlock admin</button>
+      <p class="msgline" id="codeMsg" role="alert"></p>
+    </form>
+
+    <div id="adminPanel" hidden>
+      <div class="warn" id="placeholderWarn" hidden></div>
+      <div class="warn" id="defaultCodeWarn" hidden><strong>Change the default admin code.</strong> Open the file, find <code>ADMIN_CODE</code> in the CONFIG block and set your own.</div>
+
+      <section aria-labelledby="h-add">
+        <h3 id="h-add">Add a question</h3>
+        <form id="faqForm">
+          <input type="hidden" id="cfId">
+          <div class="field"><label for="cfQ">Question (as a student would ask it)</label><input type="text" id="cfQ" required></div>
+          <div class="field"><label for="cfKw">Keywords</label><input type="text" id="cfKw" placeholder="e.g. exam date, exam time, exam room"><small>Separate with commas. Include the words and short phrases students are likely to type.</small></div>
+          <div class="field"><label for="cfCat">Topic</label><select id="cfCat"></select></div>
+          <div class="field"><label for="cfA">Answer</label><textarea id="cfA" required></textarea><small>Plain text. Web addresses become links. Blank lines make new paragraphs.</small></div>
+          <div class="row"><button type="submit" class="btn primary" id="cfSave">Save question</button><button type="button" class="btn" id="cfCancel">Clear form</button></div>
+          <p class="msgline" id="cfMsg" role="status"></p>
+        </form>
+      </section>
+
+      <section aria-labelledby="h-list">
+        <h3 id="h-list">Your added questions</h3>
+        <ul class="faqlist" id="customList"></ul>
+      </section>
+
+      <section aria-labelledby="h-unans">
+        <h3 id="h-unans">Questions the assistant could not answer</h3>
+        <p style="margin-top:0">Recorded on this browser only. Use them to decide what to add.</p>
+        <ul class="faqlist" id="unansList"></ul>
+        <div class="row" style="margin-top:.6rem"><button type="button" class="btn" id="unansClear">Clear this list</button></div>
+      </section>
+
+      <section aria-labelledby="h-ann">
+        <h3 id="h-ann">Announcement banner</h3>
+        <div class="field"><label for="annInput">Message shown at the top of the page</label><input type="text" id="annInput" maxlength="250"><small>Leave empty to hide the banner. Saved on this browser only; to show it to every student, set ANNOUNCEMENT in the CONFIG block.</small></div>
+        <button type="button" class="btn" id="annSave">Save banner</button>
+        <p class="msgline" id="annMsg" role="status"></p>
+      </section>
+
+      <section aria-labelledby="h-ex">
+        <h3 id="h-ex">Export and import</h3>
+        <p style="margin-top:0">Copy this text to move your added questions to another browser, or paste it into <code>CUSTOM_FAQS_DEFAULT</code> in the file so everyone sees them.</p>
+        <div class="field"><label for="exBox">Export or import data (JSON)</label><textarea id="exBox"></textarea></div>
+        <div class="row">
+          <button type="button" class="btn" id="exMake">Show current export</button>
+          <button type="button" class="btn" id="exCopy">Copy</button>
+          <button type="button" class="btn" id="exImport">Import from box</button>
+        </div>
+        <p class="msgline" id="exMsg" role="status"></p>
+      </section>
+    </div>
+  </div>
+</dialog>
+
+<script>
+/* =====================================================================
+   PART 1 of 3: SETTINGS (edit these values)
+   ===================================================================== */
+//@@CONFIG_START
+const CONFIG = {
+  ADMIN_CODE: "CHANGE-ME",            // <<< SET YOUR ADMIN CODE HERE
+  MODULE_CODE: "AP0600",
+  MODULE_TITLE: "Forensic Research Project",
+  ACADEMIC_YEAR: "2026\u201327",
+  SEMESTER: 1,                        // 1 or 2: picks the teaching-week dates (not used by AP0600, which runs across both semesters)
+  TUTOR_ROLE: "Module Tutor",
+  TUTOR_NAME: "Dr Kate Randall",
+  TUTOR_EMAIL: "kate.randall@northumbria.ac.uk",
+  TUTOR_OFFICE: "ELA 107",
+  STAFF: [                            // other staff. The AP0600 documents list only the Module Tutor; supervisors are allocated per student
+  ],
+  PROGRAMME_LEADER_NAME: "",          // optional: shown wherever an answer sends students to the Programme Leader
+  PROGRAMME_LEADER_EMAIL: "",
+  OPEN_DOOR_NOTE: "",                 // optional: the AP0600 module guide does not describe an open-door policy, so this is left empty
+  ANNOUNCEMENT: "",                   // e.g. "Poster printing room has changed \u2013 check eLP."
+  LAST_UPDATED: "2 October 2026",
+  COURSEWORK_DEADLINE_ISO: "",        // not used for AP0600: the DEADLINES list in Part 2 drives the countdown
+  DEADLINE_LABEL: "pitch slides 10am on 1 December 2026, poster 10am on 11 March 2027, dissertation report, logbook and lab book 4pm on 13 May 2027",
+  AI_ASSESSMENT_NOTE: "For the AP0600 dissertation, keep different draft versions as you write: the brief says they can serve as evidence if a case of potential academic misconduct is raised.",
+  FEEDBACK_URL: "",                   // optional: link to a form where students can suggest missing questions
+  LOAD_WEB_FONTS: true,               // true = load Open Sans from Google Fonts. false = no third-party requests (Open Sans then falls back to a similar system font)
+  HERO_ART: "research",               // decoration along the bottom of the page header: "peaks" (a row of trace peaks), "lab" (laboratory equipment), "research" (lab, books, magnifying glass and more) or "none"
+  PORTAL_URL: "https://myportal.northumbria.ac.uk/Help-and-support/My-Programme",
+  FEEDBACK_WORKING_DAYS: 20,          // marks and feedback turnaround (stated in each AP0600 assessment brief)
+  STORAGE_PREFIX: "ap0600bot_"        // make this unique for each module chatbot
+};
+/* Paste exported custom questions here (JSON array) to show them to everyone: */
+const CUSTOM_FAQS_DEFAULT = [];
+//@@CONFIG_END
+
+/* =====================================================================
+   Small helpers
+   ===================================================================== */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const linkify = s => s.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+const plainToHtml = t => t.split(/\n{2,}/).map(p => '<p>' + linkify(esc(p)).replace(/\n/g,'<br>') + '</p>').join('');
+const store = {
+  mem: {},
+  get(k){ try { return localStorage.getItem(CONFIG.STORAGE_PREFIX + k); } catch(e){ return this.mem[k] ?? null; } },
+  set(k,v){ try { localStorage.setItem(CONFIG.STORAGE_PREFIX + k, v); } catch(e){ this.mem[k] = v; } },
+  del(k){ try { localStorage.removeItem(CONFIG.STORAGE_PREFIX + k); } catch(e){ delete this.mem[k]; } },
+  /* accessibility choices are shared by every module chatbot on the same website */
+  getG(k){ try { return localStorage.getItem('nu_chatbot_' + k); } catch(e){ return this.mem['g_' + k] ?? null; } },
+  setG(k,v){ try { localStorage.setItem('nu_chatbot_' + k, v); } catch(e){ this.mem['g_' + k] = v; } }
+};
+const readJSON = (k, fallback) => { try { const v = store.get(k); return v ? JSON.parse(v) : fallback; } catch(e){ return fallback; } };
+const keepShort = (v, i) => (i === 0 && String(v).length <= 14 && !/[<&]/.test(v)) ? '<span style="white-space:nowrap">' + v + '</span>' : v;   // short first-column labels (bands, numbers) stay on one line
+const tbl = (head, rows) => '<div class="tblwrap" tabindex="0" role="region" aria-label="Table (scrolls sideways on narrow screens)"><table' + (head.length >= 5 ? ' class="wide"' : '') + '><thead><tr>' + head.map((h,i)=>'<th scope="col">'+keepShort(h,i)+'</th>').join('') + '</tr></thead><tbody>' + rows.map(r=>'<tr>'+r.map((c,i)=>'<td>'+keepShort(c,i)+'</td>').join('')+'</tr>').join('') + '</tbody></table></div>';
+const ul = items => '<ul>' + items.map(i=>'<li>'+i+'</li>').join('') + '</ul>';
+const src = s => '<p class="src">Source: ' + s + '</p>';
+const PORTAL_TOPICS = [
+  'Assessment regulations and policies',
+  'Summary information for students, including how the University sets assessments, how it marks with fairness and how to act on your module assignment feedback',
+  'Managing assessments in emergency scenarios',
+  "Assessment feedback and the University's Anonymous Marking Policy",
+  'Examinations and conduct in learning environments',
+  'Late submission of work and extension requests',
+  'Personal Extenuating Circumstances (PECs)',
+  'Student appeals and complaints',
+  'Academic misconduct',
+  'Disability and unforeseen medical circumstances',
+  'Assessment Regulations for Taught Awards (ARTA)',
+  'English Language Policy and guidance',
+  'Student Change of Circumstance Policy (ChoCs)',
+  'Apprenticeship Framework Policy'
+];
+const portalLink = () => '<a href="' + CONFIG.PORTAL_URL + '" target="_blank" rel="noopener noreferrer">Student Portal</a>';
+const portalNote = () => '<p class="note">Official guidance, policies and forms are in the ' + portalLink() + ' (Help and support, My Programme). You need to be signed in as a current student.</p>';
+/* ---- contact helpers: every answer that sends a student to a member of staff uses these ---- */
+const mailto = (addr, subject) => 'mailto:' + addr + (subject ? '?subject=' + encodeURIComponent(subject) : '');
+const emailLink = addr => '<a href="' + mailto(addr, CONFIG.MODULE_CODE + ' module query') + '">' + esc(addr) + '</a>';
+const mail = () => emailLink(CONFIG.TUTOR_EMAIL);                                   // the module tutor's email link
+const tutorContact = () => esc(CONFIG.TUTOR_NAME) + ' (' + mail() + ')';           // Dr Name (email link)
+const tutorRoleContact = () => 'your ' + esc(CONFIG.TUTOR_ROLE) + ', ' + tutorContact();
+const plContact = () => {                                                           // Programme Leader, with email if set in CONFIG
+  const n = CONFIG.PROGRAMME_LEADER_NAME, e = CONFIG.PROGRAMME_LEADER_EMAIL;
+  return 'your Programme Leader' + (n ? ', ' + esc(n) : '') + (e ? ' (' + emailLink(e) + ')' : '');
+};
+const staffLink = name => {                                                         // bold name, plus email link if listed in CONFIG.STAFF
+  const all = [{name: CONFIG.TUTOR_NAME, email: CONFIG.TUTOR_EMAIL}].concat(CONFIG.STAFF || []);
+  const p = all.find(x => x.name === name);
+  return '<strong>' + esc(name) + '</strong>' + (p && p.email ? ' (' + emailLink(p.email) + ')' : '');
+};
+
+/* =====================================================================
+   PART 2 of 3: MODULE-SPECIFIC CONTENT
+   Colleagues: this is the part you replace with your own module's
+   information (schedule, assessment tasks, staff, and so on).
+   ===================================================================== */
+//@@MODULE_START
+/* -----------------------------------------------------------------------
+   2a. DEADLINES AND EVENTS (from the AP0600 module guide and assessment briefs)
+   ----------------------------------------------------------------------- */
+const DEADLINES = [
+  {label:'Pitch the project: draft slides (for supervisor feedback)',     iso:'2026-11-12T10:00:00Z', text:'10:00am on Thursday 12 November 2026'},
+  {label:'Pitch the project: final slides (Comp001, 15%)',                iso:'2026-12-01T10:00:00Z', text:'10:00am on Tuesday 1 December 2026'},
+  {label:'Poster: draft (for supervisor feedback)',                       iso:'2027-02-25T10:00:00Z', text:'10:00am on Thursday 25 February 2027'},
+  {label:'Poster: final submission (Comp002, 15%)',                       iso:'2027-03-11T10:00:00Z', text:'10:00am on Thursday 11 March 2027'},
+  {label:'Dissertation report: draft (for supervisor feedback)',          iso:'2027-04-15T15:00:00Z', text:'4:00pm on Thursday 15 April 2027'},
+  {label:'Dissertation report, logbook and lab book (Comp003, 70%)',      iso:'2027-05-13T15:00:00Z', text:'4:00pm on Thursday 13 May 2027'}
+];
+const EVENTS = [
+  ['Pitch presentations','Thursday 3 December 2026. You are allocated a time slot in advance, communicated on the module eLP site.'],
+  ['Poster printing window','Thursday 11 March to Wednesday 17 March 2027, daily 9:00am\u20135:00pm, in the Zone on the ground floor of Ellison Building.'],
+  ['Poster conference','Thursday 18 March 2027: AM session 9:00am\u20131:00pm and PM session 2:00\u20135:00pm, in ELB HUB 215. You are timetabled to attend both sessions.'],
+  ['Poster awards','Friday 19 March 2027, 10:00am\u201312:00pm (location to be confirmed).']
+];
+
+/* -----------------------------------------------------------------------
+   2b. MODULE ANSWERS
+   Each answer: {id, cat, q (the question), kw (keywords students might type), a (the answer), rel (related ids)}
+   Helpers: ul([...]) bullets, tbl([headings],[[row]]) table, src('Source'), tutorContact(), staffLink('Name'), esc(...)
+   ----------------------------------------------------------------------- */
+const MODULE_KB = [
+{id:'about', cat:'module', q:'What is this module about?',
+ kw:['about','module about','what will i learn','learn','overview','aims','topics','content','module content','what do we study','what is ap0600','research project','dissertation module','final year project','40 credit','level 6'],
+ a:()=>`<p>${esc(CONFIG.MODULE_CODE)} is the <strong>level 6 Forensic Science research project</strong>, a 40-credit module. You take a topic, develop and refine your knowledge of it, and design, carry out and evaluate a research project, working with an appointed supervisor.</p>${ul(['Every project starts with a <strong>literature search</strong> to put it in context. You and your supervisor use it to set detailed project aims.','Projects can be <strong>desk-based</strong> (for example systematic reviews or data analysis) or <strong>lab-based</strong>.','You research over <strong>semesters 1 and 2</strong> to address your research question(s).','You present your work in three ways: a pitch, a poster and a written report.'])}<p>The module is designed to help you gain autonomy and develop from student to researcher, using your forensic science knowledge and laboratory skills.</p>${src('Module Guide')}`,
+ rel:['outcomes','assess-overview','project-types']},
+
+{id:'outcomes', cat:'module', q:'What am I expected to achieve on this module?',
+ kw:['outcomes','learning outcomes','expected to achieve','objectives','goals','skills','achieve','knowledge and understanding','transferable skills','employability'],
+ a:()=>`<p>By the end of the module you will be able to:</p>${ul(['<strong>Knowledge and understanding:</strong> conduct a literature survey on a proposed research topic and prepare a critical review.','<strong>Knowledge and understanding:</strong> identify and plan the research strategy needed for a body of work, and show you understand its rationale through an oral presentation and written abstract.','<strong>Knowledge and understanding:</strong> perform relevant laboratory and computational analysis to support a line of enquiry.','<strong>Intellectual and professional skills:</strong> carry out experiments or investigations rigorously, efficiently and safely.','<strong>Intellectual and professional skills:</strong> prepare a poster summarising your methods and results, and show you understand their nature and significance in discussion with academic staff.','<strong>Intellectual and professional skills:</strong> explain your findings and their context orally and visually to both an expert and a general audience.','<strong>Intellectual and professional skills:</strong> show proficiency in transferable skills including oral and written presentation, computer literacy, and literature survey and appraisal.','<strong>Personal values and attributes:</strong> think independently, and understand and justify your own opinions.'])}${src('Module Guide')}`,
+ rel:['about','assess-overview']},
+
+{id:'how-taught', cat:'module', q:'How will I learn on this module?',
+ kw:['how taught','how will i learn','teaching methods','supervision','format','delivery','learning methods','1:1 meetings','independent learning','guided research','lectures'],
+ a:()=>`<p>You learn through:</p>${ul(['<strong>1:1 meetings</strong> with your project supervisor','<strong>extensive experimental and research laboratory time</strong> (or research in an appropriate setting if your project is desk-based)','<strong>guided literature research</strong>','<strong>independent learning</strong>'])}<p>Your project is individual. Supporting information is on the module's eLearning Portal (eLP) site, and presentations and handout material from timetabled sessions are on the module site too. The Library's <a href="https://library.northumbria.ac.uk/skillsplus/" target="_blank" rel="noopener noreferrer">Skills Plus</a> pages offer extensive academic support.</p>${src('Module Guide')}`,
+ rel:['supervisor','attendance','blackboard']},
+
+{id:'staff', cat:'module', q:'Who do I contact, and who is my supervisor?',
+ kw:['who teaches','teaching team','staff','who delivers','who is my supervisor','supervisor name','allocated supervisor','appointed supervisor','who is supervising','find my supervisor','module team'],
+ a:()=>`<p>The module documents list one named contact: ${staffLink(CONFIG.TUTOR_NAME)} (${esc(CONFIG.TUTOR_ROLE)}), room ${esc(CONFIG.TUTOR_OFFICE)}.</p><p>Each student works with an <strong>appointed supervisor</strong>. The documents don't say how supervisors are allocated or listed, so if you are unsure who yours is, ask ${tutorContact()}.</p>${src('Module Guide')}`,
+ rel:['supervisor','tutor']},
+
+{id:'attendance', cat:'sessions', q:'What are the Friday and lab attendance expectations?',
+ kw:['attendance','attend','friday','fridays','every friday','all day','hours','lab hours','when are the labs open','lab opening','timetable','9am','easter','miss','missed','absent','compulsory','expectations','how much time','time commitment','working hours'],
+ a:()=>`<p>As a minimum you are expected to work on data collection and other aspects of your project <strong>all day, every Friday (9:00am\u20134:00pm)</strong>. You should be able to attend the University every Friday throughout semester 1 and <strong>until the Easter break in semester 2</strong>.</p>${ul(['Even if your project has no lab work, you will have <strong>meetings with your supervisor</strong>.','For lab-based projects, labs are usually available 09:00\u201312:00 and 13:00\u201316:00, but this may vary depending on which lab you are working in.','Staff are timetabled solely for your project work on Fridays.','Specific arrangements can be discussed with your supervisor. These are the basic requirements.'])}<p>If you can't attend for a serious reason, tell your supervisor and see "What are Personal Extenuating Circumstances (PECs)?".</p>${src('Module Guide')}`,
+ rel:['supervisor','paperwork','tips']},
+
+{id:'supervisor', cat:'sessions', q:'How do I work with my supervisor, and how do I arrange a meeting?',
+ kw:['supervisor reply','supervisor responding','supervisor respond','supervisor email','supervisor','supervisors','meeting','meet my supervisor','arrange a meeting','book a meeting','chase','supervisor not replying','1:1','one to one','supervisor feedback','contact my supervisor','supervision','project driven by you'],
+ a:()=>`<p>Your project is <strong>driven by you</strong>:</p>${ul(['Your supervisor will <strong>not chase you</strong> if you aren\u2019t attending the lab or communicating.','If you want a meeting, <strong>it is up to you to organise it in advance</strong>. Staff are timetabled solely for your project work on Fridays, so the module guide recommends arranging meetings on that day.','You get your supervisor\u2019s attention for your Friday sessions, so make the most of them: ask questions, get stuck into the project, and raise or suggest ways to tackle problems.','Your supervisor gives <strong>formative feedback on one draft</strong> of each assessment (see "Can I get feedback on a draft?").','You share your online logbook with your supervisor from the start.'])}${src('Module Guide and Comp003 brief')}`,
+ rel:['drafts','logbook','attendance']},
+
+{id:'paperwork', cat:'sessions', q:'What paperwork and approval do I need before I can start in the lab?',
+ kw:['paperwork','ethics','ethical approval','ethics approval','coshh','risk assessment','risk assessments','po form','project overview','project overview form','induction','lab induction','start lab work','can i start','approval','desk based ethics','ethics statement'],
+ a:()=>`<p>For <strong>lab-based projects</strong> you receive an induction to your lab once:</p>${ul(['the <strong>project paperwork</strong> has been completed: the Project Overview (PO) form, COSHH and risk assessments, and','the project has received <strong>ethical approval</strong>.'])}<p><strong>Desk-based projects also need ethical approval.</strong> Your dissertation report must then include an ethics statement in the methods section.</p><p>Your supervisor is the best person to ask about the forms for your own project.</p>${src('Module Guide and Comp003 brief')}`,
+ rel:['attendance','supervisor','project-types']},
+
+{id:'project-types', cat:'module', q:'What is the difference between lab-based (wet) and desk-based (dry) projects?',
+ kw:['wet','dry','wet lab','dry lab','desk based','desk-based','lab based','lab-based','systematic review','data analysis','wet project','dry project','lab book','lab book or logbook','what type of project'],
+ a:()=>`<p>Projects can be <strong>lab-based</strong> (wet) or <strong>desk-based</strong> (dry), such as systematic reviews or data analysis. Both take the same three assessments, with these differences:</p>${tbl(['','Lab-based (wet) projects','Desk-based (dry) projects'],[
+  ['Logbook (online)','Required','Required'],
+  ['Hard copy lab book','Required: submit to your supervisor by 4pm on 13 May 2027','Not required'],
+  ['Practical skills mark','Marks your laboratory data collection, including safe working','Marks your research skills and data handling'],
+  ['Ethical approval','Required','Required'],
+  ['Poster statistics','Show your results or planned results','Include the statistical analysis methods or approach']])}${src('Module Guide, Comp002 and Comp003 briefs')}`,
+ rel:['logbook','supervisor-mark','paperwork']},
+
+{id:'assess-overview', cat:'coursework', q:'How am I assessed on this module?',
+ kw:['assessment','assessed','how assessed','assessments','summative','three assessments','assessment overview','weighting','how is module marked','how many assessments','no exam','exam','marks for module','final mark','components','comp001','comp002','comp003','percentages'],
+ a:()=>`<p>There are <strong>three assessment types</strong>, and no exam:</p>${tbl(['Component','What it is','Weight','Final submission or event'],[
+  ['Comp001: Pitch the project','PowerPoint slides and Gantt chart, then a 10-minute talk with 5 minutes of questions','15%','Slides 10:00am Tue 1 Dec 2026; talks Thu 3 Dec 2026'],
+  ['Comp002: Poster presentation','A poster, then a 10-minute assessed discussion at the poster conference','15%','Poster 10:00am Thu 11 Mar 2027; conference Thu 18 Mar 2027'],
+  ['Comp003: Dissertation report','8,000-word written report','60%','4:00pm Thu 13 May 2027'],
+  ['Comp003: Supervisor mark','Logbook (all projects) and lab book (wet projects only)','10%','4:00pm Thu 13 May 2027']])}<p>Each component has a <strong>draft</strong> that your supervisor can give formative feedback on. Feedback is given electronically through eLP and at the oral sessions, and marks and feedback are provided within 20 working days of the submission date. Detailed information is in the Assessment Information pack on Blackboard.</p>${src('Module Guide and assessment briefs')}`,
+ rel:['deadline','pitch','poster']},
+
+{id:'deadline', cat:'coursework', q:'What are the assessment deadlines and key dates?',
+ kw:['deadline','deadlines','due','when due','hand in','submission date','submit by','cut off','cutoff','due date','last day','date due','when do i submit','key dates','dates','when is the','when are the presentations'],
+ a:()=>{
+   const now = new Date();
+   const next = DEADLINES.find(d => new Date(d.iso) > now);
+   let count;
+   if (next) {
+     const days = Math.ceil((new Date(next.iso) - now) / 86400000);
+     count = `<p class="note">Next deadline: <strong>${esc(next.label)}</strong>, ${esc(next.text)}. From today's date on your device, that is about <strong>${days} day${days===1?'':'s'}</strong> away.</p>`;
+   } else {
+     count = `<p class="note">According to your device's date, all of these deadlines have now passed.</p>`;
+   }
+   return `<p>These are the submission deadlines in the module guide and assessment briefs:</p>${tbl(['What','Deadline'],DEADLINES.map(d => [esc(d.label), esc(d.text)]))}${count}<p><strong>Events</strong></p>${tbl(['Event','When and where'],EVENTS.map(e => [esc(e[0]), esc(e[1])]))}<p>It is your responsibility to make sure your work arrives before the deadline. For what happens if it is late, see "What happens if I submit late?".</p>${src('Module Guide and assessment briefs')}`;
+ },
+ rel:['drafts','late','extension']},
+
+{id:'drafts', cat:'coursework', q:'Can I get feedback on a draft?',
+ kw:['draft','drafts','draft submission','formative feedback','feedback on draft','draft deadline','draft feedback','submit a draft','not obliged','draft pitch','draft poster','draft report','draft dissertation'],
+ a:()=>`<p>Yes. For each component your supervisor gives <strong>formative feedback on one draft</strong>. <strong>If you don't submit the draft by the draft deadline, they are not obliged to give feedback.</strong></p>${tbl(['Component','Draft deadline'],[
+  ['Comp001: Pitch the project','10:00am on Thursday 12 November 2026'],
+  ['Comp002: Poster','10:00am on Thursday 25 February 2027'],
+  ['Comp003: Dissertation report','4:00pm on Thursday 15 April 2027']])}<p>It is also a good idea to keep different draft versions of your dissertation as you write. They can serve as evidence if a case of potential academic misconduct is ever raised.</p>${src('Assessment briefs')}`,
+ rel:['deadline','supervisor','retain-copies']},
+
+{id:'pitch', cat:'coursework', q:'What is Comp001, Pitch the project?',
+ kw:['pitch','pitch the project','comp001','pitching','research proposal','proposal','gantt','gantt chart','pitch slides','powerpoint','pptx','10 minutes','5 minutes of questions','panel','non-specialist','15%','pitch presentation','3 december'],
+ a:()=>`<p><strong>Comp001: Pitch the project (15%).</strong> You produce a <strong>PowerPoint presentation and a Gantt chart</strong> that pitch your project, justifying your approach and proposing a realistic plan to achieve your aims. It is completed <strong>individually</strong>.</p>${ul(['<strong>Format:</strong> Microsoft PowerPoint, in <strong>landscape</strong>, saved as a .pptx file and not as a PDF or other type.','<strong>Your slides should show:</strong> background knowledge (the literature, the research gap and why your work is justified); aims and objectives that test a clear hypothesis or research question(s); a methodology overview; the data type(s) you will generate and your project stakeholders; any challenges you foresee; a Gantt chart; and references.','<strong>References:</strong> Harvard style, with at least <strong>10 peer-reviewed references</strong> expected at this stage.','<strong>Delivery:</strong> you present to a panel of two staff members, including your supervisor and a non-specialist on your topic. The talk is <strong>10 minutes</strong>, followed by <strong>5 minutes of questions</strong>. The time limit is enforced: the talk is stopped at the end of the time and marked on what you delivered.','<strong>Dates:</strong> final slides by 10:00am on Tuesday 1 December 2026, with talks on Thursday 3 December 2026. Your time slot is communicated on eLP in advance.','Your submitted version is used on the day, so you don\u2019t need to bring a copy.','There is no word limit.'])}<p>For help with Gantt charts see the Library's <a href="https://library.northumbria.ac.uk/skillsplus/time-management/gantt-chart" target="_blank" rel="noopener noreferrer">Gantt chart guide</a>. If you have an extra time allocation, the schedule accommodates it, but double-check with your supervisor in advance of the day.</p>${src('Comp001 brief and Module Guide')}`,
+ rel:['slides-tips','rubric-pitch','drafts']},
+
+{id:'slides-tips', cat:'coursework', q:'What are the rules for slide design, fonts and visuals?',
+ kw:['slides','slide design','font','font size','font style','contrast','pixelated','visual aids','colours','colors','big screen','template','landscape','design','consistent','how should my slides look','powerpoint tips'],
+ a:()=>`<p>For the pitch slides:</p>${ul(['Visual aids need to be <strong>referenced</strong> and should not look <strong>pixelated</strong>.','Choose a font style and size that are easy to read (for example size 24).','Make sure there is enough <strong>contrast</strong> between your font colour and the slide background.','Keep the visual appearance <strong>consistent</strong> between slides.','Tip: before you submit, test how your slides look on the big screen in a teaching room, and stand at the back to check them.'])}<p>For the <strong>poster</strong> the rules are specific: a minimum font size of 24 for the main body text, in the Aptos font (see "What is Comp002, the poster?"). The dissertation report uses Aptos at 12pt for the main text and 14pt for headings.</p>${src('Comp001, Comp002 and Comp003 briefs')}`,
+ rel:['pitch','poster','report']},
+
+{id:'poster', cat:'coursework', q:'What is Comp002, the poster?',
+ kw:['poster','comp002','poster presentation','a1','portrait','poster template','graphical abstract','keywords','journals','poster content','what goes on the poster','poster size','aptos','single slide','poster font','15%'],
+ a:()=>`<p><strong>Comp002: Poster presentation (15%).</strong> You produce a poster on your research topic, completed <strong>individually</strong>. It is a pivotal point: it makes you consider how your results (or predicted data) can be analysed and communicated, and how you have managed your project, just as you enter the last phase before your final report.</p><p><strong>Specification:</strong> use the PowerPoint template on the module eLP site and <strong>do not change its settings</strong>, because that affects print quality. The poster is a single slide in <strong>portrait</strong>, size <strong>A1</strong> (59.4 x 84.1 cm). Use a minimum font size of <strong>24</strong> for the main text, the <strong>Aptos</strong> font, and Harvard referencing. Save and submit it as a <strong>PDF</strong>.</p><p><strong>Your poster should include:</strong></p>${ul(['title, your name and your supervisor\u2019s name','a graphical abstract','five keywords and two journals where your work could be published','a publication that has helped develop your research','1\u20132 figures showing key results (or, if you don\u2019t have results yet, referenced figures that show how you plan to present them)','for desk-based research, your statistical analysis methods or approach','novelty and limitations of your work','the design of a new experiment that follows on from your work','a project management reflection and a timeline for outstanding work','productivity barriers and your plan for them','new skills you have acquired, and any surprises','references'])}<p>Final submission is 10:00am on Thursday 11 March 2027. See "What happens at the poster conference?" and "How do I print my poster?".</p>${src('Comp002 brief')}`,
+ rel:['poster-day','poster-print','rubric-poster']},
+
+{id:'poster-day', cat:'coursework', q:'What happens at the poster conference?',
+ kw:['poster conference','conference','poster day','18 march','poster session','poster assessment','assessed at poster','stand by poster','10 minutes','two members of staff','poster voting','vote','poster awards','elb hub','hub 215','am session','pm session','what will they ask'],
+ a:()=>`<p>The <strong>poster conference is on Thursday 18 March 2027</strong> in ELB HUB 215, split into two sessions (AM 9:00am\u20131:00pm and PM 2:00\u20135:00pm). <strong>You are timetabled to attend both sessions.</strong> You will be allocated a time slot in advance, communicated on the module eLP site.</p>${ul(['Bring your printed poster at the start of your assigned session.','During your slot you stand by your poster and are assessed for <strong>10 minutes by two members of staff</strong>.','They assess your subject and literature knowledge, data handling, project management, critical review and self-reflection, poster content and appearance, and oral delivery.','You can be asked to rationalise, clarify, justify and elaborate on any part of the poster.','University staff and students attend. You are encouraged to visit your peers\u2019 posters, but make sure you are at your own poster for your allotted time.'])}<p><strong>Voting (not part of your mark):</strong> you vote for your top 3 peer posters, based on visual appearance and content, across both sessions. Staff and students vote, and the results are presented the following morning. Poster awards are on Friday 19 March 2027, 10:00am\u201312:00pm (location to be confirmed).</p>${src('Comp002 brief')}`,
+ rel:['poster','poster-print','rubric-poster']},
+
+{id:'poster-print', cat:'coursework', q:'How do I print my poster?',
+ kw:['print','printing','print poster','where to print','the zone','smart card','large printer','nu-lfp','actual size','printing window','printer','poster printing','roll','elastic band','79 students','when to print','ellison'],
+ a:()=>`<p>After you submit, you have <strong>one week to print</strong>: the printing window is <strong>Thursday 11 March to Wednesday 17 March 2027</strong>, daily between 9:00am and 5:00pm.</p>${ul(['Print in the <strong>Zone</strong> on the ground floor of Ellison Building. The brief says the easiest way in is the Ellison Building \u201cC, C & E\u201d entrance.','You need your <strong>smart card</strong> to gain access and to print.','Use the large printers <strong>NU-LFP-001 and 002</strong>, and print at <strong>\u201cactual size\u201d</strong>.','Your cohort has 79 students, so <strong>don\u2019t wait until the day before</strong> the conference.','Roll your poster and secure it with an elastic band for transport and storage.'])}${src('Comp002 brief')}`,
+ rel:['poster','poster-day','deadline']},
+
+{id:'abstract', cat:'coursework', q:'What should my abstract include?',
+ kw:['abstract','graphical abstract','200 words','200 word abstract','write an abstract','what goes in the abstract','abstract length','ap0501'],
+ a:()=>`<p><strong>Dissertation abstract:</strong> about <strong>200 words</strong> summarising the experiments performed, the results obtained, the main conclusions, future work and stakeholders. It should neither be a statement of objectives nor refer to previous work. The brief suggests that any abstract from a scientific paper you come across during the module is a useful guide.</p><p><strong>Poster:</strong> the poster needs a <strong>graphical abstract</strong>. The brief points you to AP0501 for extra guidance on this.</p>${src('Comp002 and Comp003 briefs')}`,
+ rel:['report','poster']},
+
+{id:'report', cat:'coursework', q:'What is Comp003, the dissertation report?',
+ kw:['dissertation','report','comp003','dissertation report','8000 words','8,000 words','written report','final report','thesis','60%','formatting','format','12pt','14pt','aptos','title page','cover page','how long','how many words','font'],
+ a:()=>`<p><strong>Comp003: Dissertation report (60%).</strong> A written report of <strong>8,000 words</strong> that shows the body of research you carried out across semesters 1 and 2. It should develop the theme of your project, from the original aims to your conclusion, in a logical structure. The order you present results in may bear little relation to the order you obtained them.</p>${ul(['<strong>Deadline:</strong> final report by <strong>4:00pm on Thursday 13 May 2027</strong>, submitted through the Turnitin link on eLP. Your draft is due 4:00pm on Thursday 15 April 2027.','<strong>Formatting:</strong> main text 12pt, headings 14pt, Aptos font. Table headings go above tables and figure legends go below figures. If you number headings and subheadings, keep them in the correct order.','<strong>Title page:</strong> every report starts with the pro-forma cover page: project title, \u201cA thesis submitted in partial fulfilment of the requirements for the Degree of BSc(Hons) Forensic Science\u201d, your name, University of Northumbria, the month and year, and your number of words.','<strong>Marking:</strong> two assessors discuss and agree the final mark, and an External Examiner also reviews the work, marks and feedback.'])}<p>The Library has pages to help: <a href="https://library.northumbria.ac.uk/skillsplus/your-dissertation" target="_blank" rel="noopener noreferrer">dissertation help</a> and <a href="https://library.northumbria.ac.uk/skillsplus/submenu-academic-writing" target="_blank" rel="noopener noreferrer">academic writing and planning</a>. See "What sections should the report have?" and "What counts towards the 8,000 words?".</p>${src('Comp003 brief')}`,
+ rel:['report-template','word-limits','rubric-report']},
+
+{id:'report-template', cat:'coursework', q:'What sections should the report have?',
+ kw:['dissertation sections','report sections','dissertation structure','dissertation template','sections','structure','template','report template','report structure','introduction','aims','methods','results','discussion','conclusions','references','appendices','acknowledgements','abbreviations','contents page','ethics statement','what goes in','how to structure','layout'],
+ a:()=>`<p>The structure depends on your project, but it will typically follow this template:</p>${tbl(['Section','What it should contain'],[
+  ['Title page','The pro-forma cover page (see the dissertation answer)'],
+  ['Acknowledgements','Optional'],
+  ['Abstract','About 200 words: experiments, results, main conclusions, future work and stakeholders'],
+  ['Contents page','Detailed enough to find any section, including appendices. <strong>It counts towards the word limit</strong>, so be concise'],
+  ['List of abbreviations','Optional, in alphabetical order. Still introduce the full term in the main text first'],
+  ['Introduction / background','The current understanding of the topic from <strong>peer-reviewed literature</strong> (not Wikipedia or How Stuff Works), the background to the project, why the topic is of interest, and the knowledge gaps'],
+  ['Aims / objectives / hypotheses','Clearly identified, <strong>not hidden</strong> in the introduction'],
+  ['Experimental design, methods and ethics statement','Enough detail (materials, questionnaires, reagents, apparatus, procedures, precautions, statistical analysis) for someone to repeat your work and obtain the same results. Include the ethics statement'],
+  ['Results','Tables and/or figures with a narrative explaining them, but not excessive discussion'],
+  ['Discussion / interpretation','<strong>Separate from the results.</strong> Recap the study briefly, then evaluate the data: what they mean, how they relate to previous research, any anomalies and other explanations, and their significance. It should not be just a list of limitations'],
+  ['Conclusions','The take-home messages, and implications for further work or stakeholders'],
+  ['References','Harvard style, well chosen peer-reviewed publications, cited correctly in the text and in the reference list'],
+  ['Appendices','Additional material not in the main body, such as raw data tables']])}${src('Comp003 brief')}`,
+ rel:['report','referencing','word-limits']},
+
+{id:'word-limits', cat:'coursework', q:'What counts towards the 8,000 words?',
+ kw:['word limit','word count','words','maximum words','over the word limit','too many words','length','max words','what counts','counted','10%','under the word count','word limits policy','word limit penalty','declare word count','cover sheet'],
+ a:()=>`<p>The dissertation limit is <strong>8,000 words</strong>. The word count is declared on the front page and on the assignment cover sheet.</p>${tbl(['Counts towards the limit','Does not count'],[[ul(['everything from the front page to the end of your main written content','the contents page','in-text citations, for example (Smith, 2011), and direct secondary quotations','figure legends, table headings and table content']),ul(['the reference section','any appendices'])]])}<p>The brief says the marker will <strong>stop reading</strong> when they judge you have gone more than <strong>10% over</strong> the word count, and will mark where they stopped. There is no penalty for being under, but you may penalise yourself by missing key content. A falsified word count is treated as <strong>academic misconduct</strong> under ARTA.</p><p>The pitch has no word limit, and the poster is a single slide.</p>${src('Comp001, Comp002 and Comp003 briefs')}`,
+ rel:['report','report-template','misconduct']},
+
+{id:'logbook', cat:'coursework', q:'What do I need to put in my logbook and lab book?',
+ kw:['logbook','log book','lab book','labbook','lab notebook','notebook','onenote','microsoft notebook','onedrive','record keeping','records','hard copy','diary','what to write','weekly record','logbook link','supervisor mark logbook'],
+ a:()=>`<p>The <strong>logbook is required for both wet and dry projects</strong>. It is part of your supervisor mark (10%).</p>${ul(['<strong>What to record:</strong> evidence of your ideas, deliverables, actions and the time you spend on the project, <strong>every week</strong>.','It is <strong>not enough</strong> to write \u201cI spent 4 hours in the lab today\u201d or \u201cfound this good paper for my introduction\u201d. Give enough detail for your supervisor to track your progress.','<strong>Useful prompts:</strong> why did you use a different primer concentration or a different extraction solvent? Why is a particular topic relevant to a section of your work? How will you present your results? What optimising conditions did you use? What did you discuss with your supervisor today? What actions do you need to take before the next meeting?','<strong>Setting it up:</strong> create it through your OneDrive as a <strong>Microsoft Notebook</strong> and share it with your supervisor at the start. To submit, send the link to its location through the Assessment Submission Portal by 4:00pm on 13 May 2027.','<strong>Lab book (wet-lab projects only):</strong> keep a hard book for your day-to-day lab work, and hand the <strong>hard copy to your supervisor by 4:00pm on Thursday 13 May 2027</strong>.'])}<p>Tip: don't leave the logbook until the last minute. It is far more useful if you complete it as you go.</p>${src('Comp003 brief')}`,
+ rel:['supervisor-mark','project-types','rubric-supervisor']},
+
+{id:'supervisor-mark', cat:'coursework', q:'What is the supervisor mark (10%)?',
+ kw:['supervisor mark','supervisors mark','10%','supervisor marking','how does my supervisor mark','intellectual input','practical skills','effort','attitude','autonomy','record keeping','what does my supervisor assess'],
+ a:()=>`<p>Your supervisor gives you an overall mark worth <strong>10%</strong> of the module. It is based on four criteria, each out of 25:</p>${ul(['<strong>Record keeping:</strong> your lab book and logbook (or the logbook only for desk-based projects)','<strong>Intellectual input</strong>','<strong>Practical skills:</strong> including research skills and data handling for non-lab projects','<strong>Effort and attitude</strong>'])}<p>Submit your logbook link and (for wet projects) your hard copy lab book by 4:00pm on Thursday 13 May 2027. See the supervisor mark rubric for what each band looks like.</p>${src('Module Guide and Comp003 brief')}`,
+ rel:['rubric-supervisor','logbook','supervisor']},
+
+{id:'grades', cat:'exam', q:'How is my work marked? (rubrics and weightings)',
+ kw:['rubric','rubrics','mark bands','mark band','marking criteria','work marked','grade boundaries','what do markers look for','criteria','assessment criteria','weightings','marks breakdown','what is a 70'],
+ a:()=>`<p>Each component has its own rubric, with the criteria weighted as follows:</p>${tbl(['Component','Criteria and weighting'],[
+  ['Comp001: Pitch the project','Main content (knowledge and understanding) 50%; referencing 10%; oral presentation and questions 20%; presentation structure, visual aids and style 20%'],
+  ['Comp002: Poster','Main content (knowledge and understanding, critical analysis, self-reflection) 40%; oral performance and answers to questions 30%; poster design and structure 30%'],
+  ['Comp003: Dissertation report','Title, abstract and introduction 25%; experimental design and methods 15%; results 20%; discussion 30%; presentation, organisation and structure including referencing 10%'],
+  ['Comp003: Supervisor mark','Record keeping, intellectual input, practical skills, and effort and attitude: 25 marks each']])}<p>The pitch, poster and report rubrics use mark bands from 90 and above down to 29 and below. Ask me for a rubric, for example "How is the poster marked?".</p>${src('Assessment briefs and rubrics')}`,
+ rel:['rubric-pitch','rubric-poster','rubric-report','rubric-supervisor']},
+
+{id:'rubric-pitch', cat:'exam', q:'How is the pitch (Comp001) marked?',
+ kw:['pitch rubric','pitch marking','how is the pitch marked','pitch marks','pitch criteria','pitch bands','marking the pitch','pitch grade','pitch mark scheme'],
+ a:()=>`<p>The pitch is marked on four criteria: <strong>main content 50%</strong>, <strong>referencing 10%</strong>, <strong>oral presentation and questions 20%</strong> and <strong>structure, visual aids and style 20%</strong>.</p>${tbl(['Band','Main content (50%)','Oral presentation and questions (20%)'],[
+  ['90+','Exceptional breadth and depth, science discussed in detail within a wider scientific context, exceptional project justification and understanding of the research gap, stakeholders and data types fully considered, specific relevant challenges. Could be considered for a project proposal meeting.','Exceptionally engaging and compelling; perfect answers to questions, taking the initiative and discussing the topic widely'],
+  ['80\u201389','Excellent breadth and depth, thorough understanding, excellent justification and understanding of the research gap, stakeholders and data types identified, specific relevant challenges considered','Engaging style and a highly compelling argument; excellent answers addressing all aspects of each question'],
+  ['70\u201379','Very good: fully addresses the brief, good understanding with discussion of the science, good justification, stakeholders and data types identified, relevant challenges','Clear, fluent and persuasive; good engagement; can answer applied questions without much prompting, with some independence of thought'],
+  ['60\u201369','Good: solid understanding, addresses the majority of the brief, some discussion of the science','Some successful engagement; may lack fluency in places; reasonable attempt at applied questions; may need some prompting'],
+  ['50\u201359','Satisfactory knowledge, discusses the science in limited depth, more descriptive','Adequate, but engagement may be unsuccessful; limited ability to answer applied questions'],
+  ['40\u201349','Adequate but superficial, limited depth and discussion, predominantly descriptive','Barely adequate and difficult to follow; unable to attempt applied questions; significant prompting likely'],
+  ['30\u201339','Fails to address significant aspects of the brief; omissions and errors of understanding','Incoherent argument; unable to answer many basic questions even with prompting'],
+  ['29 and below','Fails to address significant aspects; minimal knowledge; no evaluation of the science','Incoherent or no discernible argument; no engagement; unable to answer most questions']])}<p><strong>Referencing (10%):</strong> the top bands expect a wide range of 10 or more independently researched, relevant sources with perfect or near-perfect referencing. A mark in the 60s expects 10 sources with minor issues, the 50s fewer than 10, and the lowest bands fewer than 5 or fewer than 3 sources with major referencing problems.</p><p><strong>Structure, visual aids and style (20%):</strong> ranges from \u201cconference standard\u201d with novel, professional visuals at the top, down to disorganised slides with minimal visual aids at the bottom.</p>${src('Comp001 brief and rubric')}`,
+ rel:['pitch','grades','rubric-poster']},
+
+{id:'rubric-poster', cat:'exam', q:'How is the poster (Comp002) marked?',
+ kw:['poster rubric','poster marking','how is the poster marked','poster marks','poster criteria','poster bands','marking the poster','poster grade','poster mark scheme'],
+ a:()=>`<p>The poster is marked on <strong>main content 40%</strong>, <strong>oral performance and answers to questions 30%</strong> and <strong>poster design and structure 30%</strong>.</p>${tbl(['Band','Main content (40%)','Oral performance and answers (30%)','Design and structure (30%)'],[
+  ['90+','Exceptional breadth and depth, work contextualised in detail within the wider field, substantial literature engagement','Perfect answers, takes the initiative, wide-ranging discussion, independence of thought or synthesis','Exceptional structure and visuals of professional standard, could not be improved, novel'],
+  ['80\u201389','Excellent breadth and depth, thorough understanding, excellent literature engagement','Excellent answers addressing all aspects, informed knowledge of the science','Excellent structure and very effective visuals'],
+  ['70\u201379','Very good: fully addresses the brief, very good understanding and literature engagement','Very good answers with some extra information; can answer applied questions; little prompting','Well structured with focused visuals; contains all relevant information'],
+  ['60\u201369','Good: addresses most of the brief, good understanding, some literature engagement','Competent answers to direct questions; reasonable attempt at applied questions; may need some prompting','Coherent and logical, good use of visuals; text and image balance may not be ideal'],
+  ['50\u201359','Satisfactory but limited depth; some use of sources beyond those provided','Correct answers to most direct questions but likely needs some prompting; limited extra information','Generally clear but awkward structure or limited flow'],
+  ['40\u201349','Adequate but superficial; limited wider reading; contains errors','Multiple incorrect or superficial answers; unable to attempt applied questions','Barely adequate structure; visuals need further development'],
+  ['30\u201339','Fails to address significant aspects of the brief; omissions and errors','Unable to answer many basic questions even with extensive prompting','Disorganised and unclear; minimal use of visuals'],
+  ['29 and below','Fails to address significant aspects; limited knowledge of basic concepts; no evaluation of the science','Unable to answer most questions even with extensive prompting','Disorganised, poor use of visuals, or no submission']])}${src('Comp002 brief and rubric')}`,
+ rel:['poster','poster-day','grades']},
+
+{id:'rubric-report', cat:'exam', q:'How is the dissertation report (Comp003) marked?',
+ kw:['worth report','report worth','report weighting','report rubric','dissertation rubric','dissertation marking','how is the dissertation marked','report marks','report criteria','report bands','marking the dissertation','dissertation grade','dissertation mark scheme','discussion weighting','what is worth the most'],
+ a:()=>`<p>The report is marked on five criteria. The <strong>discussion carries the most weight (30%)</strong>. The table shows what a mark in the 70s and a mark in the 40s look like for each. At 90 and above, work is described as \u201ccould not be improved in any way\u201d.</p>${tbl(['Criterion (weight)','A mark of 70\u201379','A mark of 40\u201349'],[
+  ['Title, abstract and introduction (25%)','Descriptive title and a concise, clear abstract; accurate description of the research field and outcomes; very clear rationale; clear statement of aims or hypotheses','Straightforward title and basic abstract lacking detail; major deficiency in describing the field or misrepresenting outcomes; limited rationale and statement of aims'],
+  ['Experimental design and methods, including ethics statement (15%)','Generally accurate description of materials and methods with minor omissions; clear rationale for the study design; full replication possible','Omission of key methodology or poor description; limited rationale; missing detail makes replication very difficult'],
+  ['Results (20%)','Appropriate presentation of findings and summary statistics; clear, concise, accurate description of the data','Basic presentation of data; limited descriptions and/or inappropriate content in legends'],
+  ['Discussion (30%)','Critically considers findings in relation to aims or hypotheses; concise, insightful discussion with obvious contextualisation; limitations explored','Limited analysis with faulted interpretation; limited or no contextualisation in relation to the literature or aims'],
+  ['Presentation, organisation and structure, including referencing format (10%)','Little or minor deviation from the main author instructions; very good attention to detail; few errors; coherent and generally logical','Several deviations from the main instructions; very poor attention to detail; several basic errors; sections confusing']])}${src('Comp003 brief and rubric')}`,
+ rel:['report','report-template','grades']},
+
+{id:'rubric-supervisor', cat:'exam', q:'How is the supervisor mark marked?',
+ kw:['supervisor rubric','supervisor mark rubric','supervisor marking bands','supervisor criteria','how is the supervisor mark awarded','logbook marking','practical skills marking','effort and attitude','intellectual input marking'],
+ a:()=>`<p>The supervisor mark has four criteria, each <strong>out of 25</strong>, marked in bands from 80\u2013100% down to 0\u201329%.</p>${tbl(['Criterion (/25)','At 80\u2013100%','At 40\u201349%'],[
+  ['Record keeping: lab book and logbook (logbook only for desk-based projects)','Exemplary, extensive content; a very detailed and accurate diary covering directed and independent learning; all methodology recorded, including pilot or trial methods; results logically recorded; insightful, literature-informed comments linked to future work','Satisfactory content; a reasonably detailed and accurate diary; most main methodology and results recorded; errors and omissions seen'],
+  ['Intellectual input','Faultless understanding of the aims and wider context; may develop novel ideas; finds and understands appropriate literature; significant contribution to the experimental design','Understands the aims and is aware of the wider context; needs a high level of guidance to find literature; contributes a little to the experimental design'],
+  ['Practical skills (including research skills and data handling for non-lab projects)','Faultless in all areas of data collection; may suggest or develop new methods','Capable of basic data collection with minimal supervision after training; may need help with complex activities; mistakes may mean experiments are repeated'],
+  ['Effort and attitude','Faultless engagement with excellent attendance throughout','Basic engagement with acceptable attendance']])}<p>At the lowest bands, the rubric refers to no lab book or logbook being submitted, little or no engagement, missed meetings, poor timekeeping, and for lab projects, dangerous working practices or not following health and safety rules.</p>${src('Comp003 brief and Supervisor Mark rubric')}`,
+ rel:['supervisor-mark','logbook','grades']},
+
+{id:'referencing', cat:'coursework', q:'How should I reference my sources?',
+ kw:['referencing','reference','references','harvard','cite','citing','citation','bibliography','reference list','endnote','end note','peer reviewed','peer-reviewed','how many references','10 references','how to reference','wikipedia'],
+ a:()=>`<p>Use the <strong>Harvard referencing style</strong> in all three assessments. The pitch is expected to have <strong>at least 10 peer-reviewed references</strong>, and for the report it is not just citing correctly but <strong>choosing the most appropriate, high-quality peer-reviewed publications</strong> to support your arguments (not Wikipedia or How Stuff Works). Citations must be correct in the text and in the reference list.</p><p>The brief highly recommends using <strong>EndNote</strong> as your reference database, and there is specific EndNote training if you need a refresher. The Library has a <a href="https://library.northumbria.ac.uk/skillsplus/referencing/harvardcitethemright" target="_blank" rel="noopener noreferrer">Harvard referencing page</a> and the wider <a href="https://library.northumbria.ac.uk/skillsplus" target="_blank" rel="noopener noreferrer">Skills Plus</a> pages.</p>${src('Comp001 and Comp003 briefs')}`,
+ rel:['pitch','report-template','misconduct']},
+
+{id:'submit', cat:'coursework', q:'How do I submit my work?',
+ kw:['submit','submission','turnitin','how to submit','upload','where to submit','submit coursework','electronic submission','hand in','submission portal','submit poster','submit pitch','submit logbook','submit lab book','pdf','pptx'],
+ a:()=>`<p>Each item has its own route:</p>${tbl(['Item','How to submit'],[
+  ['Pitch slides (Comp001)','Online through the Turnitin link on the module eLP site, as a .pptx PowerPoint file (not a PDF)'],
+  ['Poster (Comp002)','Online through the module eLP site (the brief lists it as a Blackboard submission), saved as a PDF'],
+  ['Dissertation report (Comp003)','Online through the Turnitin link on the module eLP site'],
+  ['Online logbook (Comp003)','Submit a link to your Microsoft Notebook through the Assessment Submission Portal'],
+  ['Lab book (wet projects only)','Hand the hard copy to your supervisor by the deadline']])}<p>It is your responsibility to make sure your work arrives before the deadline. See "What are the assessment deadlines and key dates?".</p>${src('Assessment briefs')}`,
+ rel:['deadline','late','logbook']},
+
+{id:'blackboard', cat:'sessions', q:'Where do I find templates, handouts and other module information?',
+ kw:['blackboard','elp','materials','slides','notes','resources','where are','download','online materials','module site','bb','handouts','assessment information pack','information pack','templates','poster template','time slot'],
+ a:()=>`<p>The module's <strong>eLP (Blackboard)</strong> site holds:</p>${ul(['presentations and handout material from timetabled sessions','supporting information for the module','the <strong>Assessment Information pack</strong> with detailed information on each assessment','the <strong>poster template</strong> (PowerPoint)','the Turnitin submission links','your allocated <strong>time slots</strong> for the pitch and the poster conference','the generic reading list (also available through the library website)'])}${src('Module Guide and assessment briefs')}`,
+ rel:['reading','deadline','submit']},
+
+{id:'reading', cat:'sessions', q:'Where is the reading list and where can I get help with research skills?',
+ kw:['reading list','reading','books','library','papers','journal','recommended reading','literature','articles','skills plus','library help','literature search','find papers','academic writing','dissertation help'],
+ a:()=>`<p>A <strong>generic reading list</strong> for the module is available through the library website or directly from the Blackboard module site. For your own topic, your literature search is a core part of the project and you build it with your supervisor.</p>${ul(['<a href="https://library.northumbria.ac.uk/skillsplus" target="_blank" rel="noopener noreferrer">Library Skills Plus</a>: tools to help with the whole module','<a href="https://library.northumbria.ac.uk/skillsplus/your-dissertation" target="_blank" rel="noopener noreferrer">Dissertation help</a>','<a href="https://library.northumbria.ac.uk/skillsplus/submenu-academic-writing" target="_blank" rel="noopener noreferrer">Academic writing and planning</a>','<a href="https://library.northumbria.ac.uk/skillsplus/AI-index" target="_blank" rel="noopener noreferrer">Using AI responsibly</a>'])}${src('Module Guide and Comp003 brief')}`,
+ rel:['referencing','blackboard']},
+
+{id:'tips', cat:'sessions', q:'What advice is there for making a success of the project?',
+ kw:['advice','tips','top tips','how to do well','success','time management','plan','planning','underestimate','get started','good luck','how to succeed','hints','guidance','present results','results presentation'],
+ a:()=>`<p>The module guide gives this additional guidance:</p>${ul(['<strong>Do not underestimate your time.</strong>','You have a unique opportunity to have your supervisor\u2019s attention in your Friday sessions. Make the most of it.','Ask questions and get stuck into the project.','Think early on about how you might present and analyse your results. This applies to desk-based studies too, where you can be creative about how you present your findings.','You are responsible for driving the project forward, raising issues and suggesting ways to tackle them.'])}<p>Also: keep your logbook up to date as you go, and keep draft versions of your work.</p>${src('Module Guide and Comp003 brief')}`,
+ rel:['attendance','supervisor','logbook']},
+
+{id:'extra-time', cat:'sessions', q:'I have an extra time allocation. How does it work for the presentations?',
+ kw:['extra time','extra time allocation','reasonable adjustments presentation','sap','accessibility plan presentation','longer to present','adjustments for the pitch','adjustments for poster'],
+ a:()=>`<p>For the pitch, the brief says <strong>the schedule will accommodate students with extra time allocations</strong>, but you should double-check this with your supervisor in advance of the day.</p><p>For adjustments in general, see "Can I get adjustments to how I am assessed?".</p>${src('Comp001 brief')}`,
+ rel:['adjustments','pitch','supervisor']},
+
+{id:'retain-copies', cat:'coursework', q:'Do I need to keep copies of my work?',
+ kw:['keep copies','retain','electronic copy','evidence of work','24 hours','requested','copy of assignment','keep my work','save copy','appendices','backups','back up','backup drafts','draft versions'],
+ a:()=>`<p>Yes. The assessment briefs say you must <strong>keep an electronic copy of your assignment, including all appendices</strong>, and make it available <strong>within 24 hours</strong> if you are asked for it. For the dissertation, it is also recommended that you keep different draft versions as you write: they can serve as evidence if a case of potential academic misconduct is raised. If you use AI, keep your AI evidence log too (see "What is the GenAI evidence log?").</p>${src('Module Guide, Comp003 brief and AI Evidence Log')}`,
+ rel:['drafts','ai-log','misconduct']}
+];
+
+/* Questions shown in the "Popular questions" list and as buttons on the welcome message.
+   Use ids from your entries (missing ids are simply skipped). */
+const POPULAR = ['deadline','assess-overview','pitch','poster','report','logbook','tutor','ai-rules'];
+const WELCOME_CHIPS = ['deadline','attendance','paperwork','pitch','poster','report'];
+//@@MODULE_END
+
+/* =====================================================================
+   PART 3 of 3: SHARED UNIVERSITY AND SCHOOL CONTENT
+   Usually left as it is. These answers come from the Academic
+   Regulations for Taught Awards 2026/27, the Student Portal list, the
+   University's student AI guidance, the School's AI declaration and
+   evidence log, and the 2026-27 academic calendar. Review each September.
+   ===================================================================== */
+/* Week-commencing dates for teaching weeks (from the 2026-27 academic calendar).
+   Teaching week 9 in Semester 2 is not listed in the calendar document. */
+const WC_SEM1 = {1:'28 September',2:'5 October',3:'12 October',4:'19 October',5:'26 October',6:'2 November',7:'9 November',8:'16 November',9:'23 November',10:'30 November',11:'7 December',12:'14 December'};
+const WC_SEM2 = {1:'25 January',2:'1 February',3:'8 February',4:'15 February',5:'22 February',6:'1 March',7:'8 March',8:'15 March',10:'12 April',11:'19 April',12:'26 April'};
+const WC = new Proxy(CONFIG.SEMESTER === 2 ? WC_SEM2 : WC_SEM1, { get:(t,k) => t[k] || 'see the academic calendar' });
+
+const CATS = [
+  {id:'module',   name:'Module and contacts'},
+  {id:'sessions', name:'Sessions and timetable'},
+  {id:'coursework',name:'Coursework'},
+  {id:'exam',     name:'Exam, marks and resits'},
+  {id:'ai',       name:'Using AI: rules, ethics and declarations'},
+  {id:'dates',    name:'Dates and calendar'},
+  {id:'regs',     name:'University regulations and policies'},
+  {id:'support',  name:'Help and support'}
+];
+
+const SHARED_KB = [
+{id:'tutor', cat:'module', q:'Who is the module tutor and how do I contact them?',
+ kw:['tutor','module tutor','module leader','contact','email','office','who runs','who is in charge','speak to','talk to','get in touch','contact tutor','phone'].concat(String(CONFIG.TUTOR_NAME).toLowerCase().split(/\s+/).filter(w => /^[a-z\-]+$/.test(w) && w.length > 2 && !/^(dr|prof|professor|mr|mrs|ms|miss|mx)$/.test(w)), [String(CONFIG.TUTOR_OFFICE).toLowerCase()]),
+ a:()=>`<p>Your ${esc(CONFIG.TUTOR_ROLE)} is <strong>${esc(CONFIG.TUTOR_NAME)}</strong>.</p>${ul(['Office: '+esc(CONFIG.TUTOR_OFFICE),'Email: '+mail()])}${CONFIG.OPEN_DOOR_NOTE ? '<p>' + esc(CONFIG.OPEN_DOOR_NOTE) + '</p>' : ''}${src('Module Guide')}`,
+ rel:['support','staff','feedback']},
+
+{id:'boundary', cat:'coursework', q:'Can you give me the answers or write my coursework?',
+ kw:['give me the answer','answers','model answer','exemplar','example answer','write my','do my coursework','write it for me','solve','what should i write','tell me the answer','complete my','answer for task','answers to task','what is the answer','correct answer','cheat','sample answer','past paper answer'],
+ a:()=>`<p>No, I can’t do that. The coursework must be your own work, and I only hold administrative information from the module documents. I can:</p>${ul(['explain what each task asks for and how it is marked','tell you which lecture covers a topic','remind you of deadlines, word limits and the AI rules','point you to tutorials and to '+esc(CONFIG.TUTOR_NAME)])}<p>For help with the science or your own draft, use the tutorials and lecture materials, or email ${mail()}.</p>`,
+ rel:['coursework-tutorial','ai-rules','misconduct']},
+
+{id:'pass-referral', cat:'exam', q:'What is the pass mark, and what if I fail (resits)?',
+ kw:['pass mark','pass','fail','failing','resit','resits','retake','referral','referred','reassessment','second attempt','re-sit','40%','what if i fail','overall pass','need to pass both','both components','do i need to pass exam','rounded','rounding'],
+ a:()=>`<p>The pass mark for an undergraduate module (up to and including level 6) is <strong>40%</strong>, unless a higher mark has been approved for professional body (PSRB) reasons. Module marks are rounded to the nearest whole percentage.</p><p>If a module has more than one assessment component and you reach an overall pass, you are <strong>not required to attempt or pass every component</strong> (unless a PSRB requirement applies).</p><p>If you don’t reach an overall pass, you are eligible for a <strong>referral</strong> in the failed module and/or any component you didn’t attempt:</p>${ul(['Reassessment is normally the same method (for example, a report) and may use the same task or a different one, as decided by the Module Leader.','The referral opportunity normally comes after the end-of-level Programme Assessment Board (PAB). If you can’t take it, you can resit at the next scheduled sitting, which normally pauses progression until the level is completed.','If you pass after referral, you receive the module pass mark (40%), and that is the mark used for final classification.','Coursework submitted more than 24 hours late without approval is marked zero but is still eligible for referral.'])}<p>You can’t re-attempt a module you have passed, except where Personal Extenuating Circumstances (PECs) or a late-recognised Student Accessibility Plan apply. For failed modules that are close to the pass mark, see the compensation question. For what happens if you fail after referral, see the repeat question.</p>${src('Module Guide, Assessment Brief and ARTA 2026/27 sections 2 and 3.6')}`,
+ rel:['compensation','repeat','late']},
+
+{id:'late', cat:'exam', q:'What happens if I submit late?',
+ kw:['late','late submission','penalty','submitted late','after the deadline','miss the deadline','missed deadline','late penalty','10%','deducted','zero','24 hours late','one day late','late work'],
+ a:()=>`<p>If coursework is handed in <strong>without approval</strong> after the published deadline:</p>${ul(['<strong>Up to 1 working day (24 hours) late:</strong> 10% of the total marks available for the assessment (that is, 10 percentage points) is deducted. For example, work that would have scored 65%, 55% or 45% is awarded 55%, 45% or 35%.','<strong>More than 1 day (24 hours) late:</strong> the work is marked as zero, but you are still eligible for referral.'])}<p>The University regulations (ARTA 1.12) say the penalty applies if you miss the agreed deadline and <em>have not been granted an extension of time</em>. To ask for one, see "How do I ask for an extension?". If serious personal circumstances affected you, see "What are Personal Extenuating Circumstances (PECs)?".</p>${src('Module Guide, Assessment Brief and ARTA 2026/27')}`,
+ rel:['extension','pec','deadline']},
+
+{id:'feedback', cat:'exam', q:'When will I get my marks and feedback?',
+ kw:['feedback','marks back','feedback back','get my marks','get my feedback','when will i get my marks','how long marking','how long does marking take','long','results','return of marks','turnaround','working days','20 working days','marked','when are results','historical marks'],
+ a:()=>`<p>Marks and feedback are provided within <strong>${CONFIG.FEEDBACK_WORKING_DAYS} working days</strong> of each assessment.</p><p>Two points from the University's regulations (ARTA 1.15) are worth knowing:</p>${ul(['The mark you are given first is a <strong>recommended mark</strong>. It is released once the work has been internally moderated and recorded.','<strong>Definitive marks</strong> are agreed at the end-of-year Programme Assessment Board (PAB), after any external moderation. They are released to you within three weeks of the PAB meeting.'])}<p>Your module guide explains any formative feedback you will get during the module (for example in tutorials). You can request historical marks through <strong>Help and Support</strong> in your ${portalLink()}, and the portal explains the Anonymous Marking Policy and how to act on your module assignment feedback.</p>${src('Module leader information, ARTA 2026/27 and Module Guide')}`,
+ rel:['formative','grades','appeals']},
+
+{id:'ai-rules', cat:'ai', q:'Can I use AI for my coursework?',
+ kw:['ai','use ai','artificial intelligence','chatgpt','claude','copilot','gemini','generative ai','genai','can i use ai','ai allowed','ai policy','ai rules','llm','use of ai','grammar check','grammarly'],
+ a:()=>`<p><strong>AI should not be used to do the core work for you.</strong> The content you submit must be your own original work, and you must verify any information an AI tool generates. If you use AI you must acknowledge it and explain how and where.</p>${tbl(['Appropriate use (unless prohibited for the assessment)','Inappropriate use (academic misconduct)'],[[ul(['Explaining difficult concepts','Helping to structure ideas','Brainstorming ideas','Clarifying assessment requirements','Checking grammar and style','Providing feedback on drafts','Suggesting research ideas']),ul(['Submitting AI writing as your own','Having AI write entire sections','Using it without permission or acknowledgement','Generating data or references','Bypassing learning objectives'])]])}<p>Northumbria provides <strong>Claude for Education</strong> to students and highly recommends using only Claude for assessment-linked work. If you use another assistant, you must be able to share a link to the conversation if asked. ${CONFIG.AI_ASSESSMENT_NOTE ? esc(CONFIG.AI_ASSESSMENT_NOTE) : ''}</p>${src('Module Guide, AI Declaration and AI Evidence Log')}`,
+ rel:['genai-acceptable','ai-tool','ai-declaration','ai-log','task4']},
+
+{id:'ai-declaration', cat:'ai', q:'What is the AI declaration and how do I complete it?',
+ kw:['declaration','ai declaration','coversheet','cover sheet','declaration of original work','tick','tick boxes','sign','signature','signed','i have not used ai','declare','declare ai use'],
+ a:()=>`<p>Where your assessment uses the University’s AI declaration coversheet (check your assessment brief), it has two parts:</p>${ul(['<strong>Declaration of original work:</strong> tick to confirm the submission is your own independent work and that you have referenced all sources.','<strong>Declaration of AI use:</strong> tick <em>either</em> that you have NOT used AI at any point, <em>or</em> that you HAVE used it only in line with the acceptable-use guidance, and tick each purpose that applies (brainstorm, plan/structure, explain concepts, check grammar, feedback on a draft, or other with an explanation).'])}<p>You also confirm you have <strong>not</strong> used AI to generate whole sentences, paragraphs or sections, and that doing so would be academic misconduct. Sign with your name (a typed name is sufficient) and add the date.</p>${src('AI Declaration and Coursework Template')}`,
+ rel:['ai-log','ai-rules','task4']},
+
+{id:'ai-log', cat:'ai', q:'What is the GenAI evidence log?',
+ kw:['evidence log','genai evidence log','ai log','log','record of ai use','conversation link','share conversation','prompts','purpose of use','keep record','ai evidence'],
+ a:()=>`<p>The <strong>GenAI Evidence Log</strong> is a record of your AI use that you keep for yourself. It may be requested to clarify how you used AI in an assessment. For each use, note:</p>${ul(['the <strong>purpose</strong>, matching a category on your declaration: <em>Brainstorm, Plan, Explain, Check, Feedback</em> or <em>Other</em>','a <strong>link to the conversation</strong>','a brief note on how it helped and what changes it led to'])}<p>Add rows as needed, and record the module code, the assessment and the date completed. Keep all drafts, notes, prompts, outputs and cited sources, and produce them within 24 hours if asked.</p>${src('AI Evidence Log')}`,
+ rel:['ai-declaration','retain-copies','ai-rules']},
+
+{id:'misconduct', cat:'ai', q:'What counts as academic misconduct?',
+ kw:['plagiarism','misconduct','academic misconduct','collusion','cheating','copying','turnitin similarity','arta','consequences','zero','penalty for plagiarism','work together','group work','share answers','unauthorised access','protect my work','share my work'],
+ a:()=>`<p>Plagiarism, collusion, misuse of AI systems and other forms of academic misconduct are taken very seriously. Work in which evidence of them is found <strong>may receive a mark of zero</strong>. The rules are in the Assessment Regulations for Taught Awards (ARTA) and the University's Policy on Academic Misconduct.</p>${ul(['You must also take <strong>reasonable precautions to guard against unauthorised access</strong> to your work by others.','A module failed because of academic misconduct <strong>cannot be compensated</strong>, but it can be referred.','You must retain all drafts, preparation notes and sources, and produce them within 24 hours if asked.'])}<p>The ${portalLink()} has a section on <strong>Academic misconduct</strong>.</p>${src('Module Guide, Assessment Brief and ARTA 2026/27 (1.10, 3.5, 3.6)')}<p><a href="https://www.northumbria.ac.uk/about-us/university-services/student-library-and-academic-services/quality-and-teaching-excellence/assessment/guidance-for-students/" target="_blank" rel="noopener noreferrer">Assessment regulations guidance for students</a></p>`,
+ rel:['ai-rules','retain-copies','assess-regs']},
+
+{id:'genai-what', cat:'ai', q:'What is generative AI and how does it work?',
+ kw:['generative ai','what is generative ai','what is ai','how does ai work','how do chatbots work','machine learning','neural network','neural networks','training data','large language model','hallucination','hallucinations','made up facts','ai models','deep learning','artificial intelligence'],
+ a:()=>`<p><strong>Generative AI</strong> is a category of artificial intelligence that uses machine learning to generate new content such as text, images, video and music.</p>${ul(['<strong>Models</strong> are trained on very large datasets to learn patterns and rules, which they then use to generate new content.','<strong>Training data</strong> is the set of examples the model learns from.','<strong>Neural networks</strong> are algorithms, loosely modelled on the human brain, that are used to train these models.','<strong>Hallucination:</strong> generative AI can produce made-up facts and figures that sound convincing, so anything it tells you must be checked.'])}<p>I can explain the basic idea, but for how to use it in your studies see "How can I use AI acceptably in my assessments?".</p>${src("University guidance: A Student's Introduction to Generative AI")}`,
+ rel:['genai-acceptable','genai-evaluate','genai-ethics']},
+
+{id:'genai-acceptable', cat:'ai', q:'How can I use AI acceptably in my assessments?',
+ kw:['acceptable use','acceptable ai','appropriate use','use ai revise','use ai outline','use ai ideas','use ai brainstorm','use ai plan','use ai explain','use ai study','use ai understand','use ai summarise','use ai feedback','ai revise','revise ai','ai support','ai revision','ai brainstorm','ai outline','create an outline','knowledge checking','simplify','analogy','support mechanism','ai for studying','study with ai','ai planning','ai to help me','ai to explain','ai for ideas','ai summarise','ai proofreading'],
+ a:()=>`<p>The University's guidance is that generative AI should be a <strong>supplementary tool, not a substitute for your own effort</strong>. It is acceptable to use it to:</p>${ul(['generate ideas or create outlines','help you understand a subject, including clarifying complex concepts with simpler explanations or analogies','check your knowledge and get suggestions for revision materials','plan your approach and understand what an assessment is asking for','help gather and make sense of information for research'])}<p>When you use insights from AI in your work, <strong>process the information critically and express it in your own words</strong>.</p><p class="note">Always check the rules for the specific assessment: appropriate use applies "unless prohibited for the assessment". You must acknowledge and explain any AI use in your declaration, and keep an evidence log. See "Can I use AI for my coursework?" for the full list of appropriate and inappropriate uses.</p>${src("University guidance: A Student's Introduction to Generative AI; AI Declaration")}`,
+ rel:['ai-rules','genai-copypaste','ai-declaration']},
+
+{id:'genai-copypaste', cat:'ai', q:'What is the "copy and paste" approach and why is it a problem?',
+ kw:['copy and paste','copy paste','copying ai','ghosting','ghost writing','contract cheating','section 3.6','essay mill','paste ai','submit ai work','ai written','ai generated essay','use ai to write','write my essay ai','ai write my assignment'],
+ a:()=>`<p>The "copy and paste" approach means using AI-generated content directly in an assessment <strong>without proper attribution or your own input</strong>. Submitting it as your own work is treated as a serious breach of academic policy.</p><p>Section 3.6 of the University's Academic Misconduct Policy covers <strong>ghosting, including contract cheating and the use of AI systems</strong>. It applies where you submit as your own work something produced in whole or in part by another person or an AI system on your behalf. It also covers deliberately making material available to another student so they can commit misconduct.</p><p>Consequences can include failing the assignment, disciplinary action, or more severe penalties, and work found to involve misconduct may receive a mark of zero. It also undermines your own learning and can affect your academic and professional credibility.</p>${src("University guidance: A Student's Introduction to Generative AI; Module Guide")}`,
+ rel:['misconduct','genai-acceptable','ai-rules']},
+
+{id:'genai-privacy', cat:'ai', q:'What should I never put into an AI tool? (privacy and data)',
+ kw:['never put ai tool','never put ai','put ai','never share ai','share ai','tell ai','give ai','type ai personal','what not share ai','privacy','data privacy','gdpr','personal data','personal information','identifiable information','upload ai','upload personal','upload data','what not to upload','confidential','data protection','ccpa','consent','research consent','research participants','data minimisation','minimisation','safe to share','share personal details','copyright','intellectual property','criminal offence'],
+ a:()=>`<p><strong>Never upload personal or identifiable information to an AI product.</strong> Collecting and storing personal data creates risks such as data breaches and identity theft.</p>${ul(['<strong>Data minimisation:</strong> share as little as possible. Think about what you upload and what you say about yourself to AI products.','<strong>Privacy law:</strong> rules such as GDPR (UK/EU) and CCPA (US) apply. AI models are often trained on data scraped from the internet without people\u2019s explicit consent, which is a serious privacy concern.','<strong>Research:</strong> if you plan to analyse research data with AI as part of your programme, be wholly clear in your research approach, collect the relevant consent, and explain to participants how their data will be processed and analysed. Repeat this in more than one format, including the written consent, and get support from your programme teaching team first.','<strong>Intellectual property:</strong> AI-generated content can raise copyright and ownership issues, so make sure it doesn\u2019t infringe others\u2019 rights.'])}<p>The University\u2019s guidance also notes that improper use of AI can, in the UK, be tried as a criminal offence.</p>${src("University guidance: A Student's Introduction to Generative AI")}`,
+ rel:['genai-ethics','genai-acceptable','ai-rules']},
+
+{id:'genai-evaluate', cat:'ai', q:'How do I check AI-generated content critically?',
+ kw:['check ai','verify ai','ai accuracy','is ai accurate','is ai reliable','fact check','fake references','made up references','critically evaluate','critical evaluation','authenticity','human oversight','accountability','ai mistakes','ai errors','ai wrong','can i trust ai','check ai output'],
+ a:()=>`<p>You are accountable for everything you submit, so check AI output before you rely on it. The University suggests looking at three things:</p>${ul(['<strong>Authenticity:</strong> where the information comes from, whether it is accurate, and whether there are biases.','<strong>Quality:</strong> grammar, spelling and readability, to judge whether it is actually good.','<strong>Potential bias:</strong> the language, tone and perspective, to see whether it leans one way.'])}<p>Generative AI can "hallucinate", meaning it makes up facts, figures and sources. Your module guide says you must verify any information generated by AI tools. Generating data or references is listed as <strong>inappropriate</strong> use. Human oversight and accountability stay with you.</p>${src("University guidance: A Student's Introduction to Generative AI; Module Guide; AI Declaration")}`,
+ rel:['genai-what','genai-acceptable','ai-rules']},
+
+{id:'genai-ethics', cat:'ai', q:'What are the ethical concerns about generative AI?',
+ kw:['ethics','ethical','ethical concerns','ai ethics','moral','bias','ai bias','environmental impact','carbon','energy use','sustainability','annotators','human annotators','misuse','propaganda','misinformation','hate speech','discrimination','stereotypes','ethical use of ai'],
+ a:()=>`<p>The University's guidance highlights several ethical issues:</p>${ul(['<strong>Authenticity and misuse:</strong> AI content can be hard to tell from human work, and can be misused to spread false information, propaganda and hate speech.','<strong>Bias:</strong> models learn from their training data, which may contain biases, stereotypes or inappropriate content. Outputs can be discriminatory or offensive and affect marginalised groups disproportionately.','<strong>Privacy:</strong> training data often includes personal information scraped without explicit consent.','<strong>Human cost:</strong> training large language models relies on human annotators who review and label huge datasets and may see disturbing material such as graphic violence and hate speech. This can seriously affect their mental health.','<strong>Environmental impact:</strong> training large models uses significant energy and contributes to carbon emissions.','<strong>Intellectual property:</strong> copyright infringement and ownership disputes.'])}<p>Northumbria's AI principles (see "What are Northumbria's AI principles?") include ethical guidelines, human oversight and environmental sustainability.</p>${src("University guidance: A Student's Introduction to Generative AI")}`,
+ rel:['genai-privacy','genai-principles','genai-what']},
+
+{id:'genai-principles', cat:'ai', q:"What are Northumbria's AI principles?",
+ kw:['ai principles','northumbria ai principles','university ai principles','guiding principles','ten principles','10 principles','university stance on ai','ai strategy','university approach ai'],
+ a:()=>`<p>Northumbria uses <strong>10 guiding principles</strong> for its ethical stance and approach to working with AI systems. Student and staff safety is the number one priority, with clear ethical guidance, data privacy and security at the forefront.</p>${ul(['Safety, privacy and security','Ethical guidelines','Education and awareness','Equitable access to generative AI','Responsible research','Human oversight','Interdisciplinary collaboration','Social impact, public good and external collaboration','Ongoing review and improvement','Environmental sustainability'])}${src("University guidance: A Student's Introduction to Generative AI")}`,
+ rel:['genai-ethics','genai-links','ai-rules']},
+
+{id:'ai-tool', cat:'ai', q:'Which AI tool should I use, and how do I get access?',
+ kw:['ai tool','ai tools','ai tool use','which ai tool','best ai tool','what ai tools','recommended ai','ai access','access to ai','register for claude','university ai tool','approved ai','use another ai','other ai tools','share conversation link','conversation link','claude for education','tool'],
+ a:()=>`<p>Northumbria provides <strong>Claude for Education</strong> to all students, and the GenAI Evidence Log says it is highly recommended that you <strong>only use Claude</strong> for any assessment-linked work. If you intend to use it, register for access through your Student Portal and make sure you understand what it can and can't be used for. See <a href="https://myportal.northumbria.ac.uk/Help-and-support/IT/Artificial-Intelligence/How-you-can-use-AI-tools-in-assessments" target="_blank" rel="noopener noreferrer">How you can use AI tools in assessments</a>.</p><p>If you use a different AI assistant, you must be able to <strong>share a link to the conversation</strong> for inspection if you are asked.</p><p>Whichever tool you use, never upload personal or identifiable information (see "What should I never put into an AI tool?").</p>${src('AI Declaration and AI Evidence Log')}`,
+ rel:['ai-log','genai-privacy','ai-rules']},
+
+{id:'genai-links', cat:'ai', q:"Where can I find the University's AI guidance and support?",
+ kw:['ai guidance','ai guide','using ai responsibly','student it guides','it guides','ai resources','learn about ai','further guidance ai','library skills plus','skills plus','ai help','ai training','ai support university'],
+ a:()=>`<p>The University publishes student guidance on AI in four main places:</p>${ul(['<strong>Using AI responsibly and ethically:</strong> a guide to using AI tools to support your learning.','<strong>Understanding Academic Integrity and Academic Misconduct:</strong> advice on academic integrity and misconduct, including the use of AI.','<strong>Northumbria Student IT Guides:</strong> how to use AI tools safely and appropriately during your studies.','<strong>How you can use AI tools in assessments:</strong> guidance on specific assignment types and academic integrity.'])}${ul(['<a href="https://myportal.northumbria.ac.uk/Help-and-support/IT/Artificial-Intelligence/How-you-can-use-AI-tools-in-assessments" target="_blank" rel="noopener noreferrer">How you can use AI tools in assessments (Student Portal)</a>','<a href="https://library.northumbria.ac.uk/skillsplus/AI-index" target="_blank" rel="noopener noreferrer">Library Skills Plus: AI</a>'])}<p>You can find the others through the ${portalLink()} and Library Skills Plus.</p>${src("University guidance: A Student's Introduction to Generative AI")}`,
+ rel:['ai-rules','genai-principles','misconduct']},
+
+{id:'calendar', cat:'dates', q:'What are the key dates this year?',
+ kw:['calendar','key dates','term dates','semester','academic calendar','semester 1','semester 2','dates','when does teaching start','when does semester start','induction','induction week','enhancement week','revision week','spring','easter','break','holiday','assessment period'],
+ a:()=>`<p><strong>Semester 1, 2026</strong></p>${ul(['Induction week: w/c 21 September (TT week 9)','Teaching week 1: w/c 28 September (TT week 10)','Enhancement week (teaching week 6): w/c 2 November','Teaching week 12 / revision week: w/c 14 December (TT week 21)'].concat(CONFIG.DEADLINE_LABEL ? ['Coursework due: ' + esc(CONFIG.DEADLINE_LABEL)] : []))}<p><strong>Semester 2, 2027</strong></p>${ul(['An assessment period is listed before Semester 2 teaching; the calendar I hold gives no exact dates for it','Teaching week 1: w/c 25 January (TT week 27)','Enhancement week (teaching week 6): w/c 1 March','Spring break: w/c 22 March (TT weeks 35 to 37)','Teaching resumes w/c 12 April (teaching week 10, TT week 38)','Revision week: w/c 26 April (TT week 40)'])}${src('Academic Calendar 2026–27')}`,
+ rel:['schedule','deadline','enhancement']},
+
+{id:'enhancement', cat:'dates', q:'Is there teaching in enhancement week?',
+ kw:['enhancement week','enhancement','week 6','2 november','no lectures','reading week'],
+ a:()=>`<p>Teaching week 6 in each semester is <strong>enhancement week</strong>: w/c <strong>2 November 2026</strong> in Semester 1 and w/c <strong>1 March 2027</strong> in Semester 2. Check your teaching schedule and personal timetable to see what, if anything, is running for this module that week.</p>${src('Academic Calendar 2026–27')}`,
+ rel:['calendar','schedule']},
+
+{id:'support', cat:'support', q:'What academic support is available?',
+ kw:['support','academic support','help','open door','open-door','appointment','meeting','teams call','office hours','drop in','talk to someone','need support','wellbeing','struggling','personal tutor','programme leader','student central','students union','su advice'],
+ a:()=>`<p>${CONFIG.OPEN_DOOR_NOTE ? esc(CONFIG.OPEN_DOOR_NOTE) + ' ' : ''}Your ${esc(CONFIG.TUTOR_ROLE)} is ${tutorContact()}, office ${esc(CONFIG.TUTOR_OFFICE)}.</p><p>If you have difficulty understanding the University regulations, ARTA suggests talking to ${plContact()}, your <strong>Personal Tutor</strong>, or the Support section of your ${portalLink()}, or contacting Student Central. You can also get independent advice from the <strong>Students' Union Advice Team</strong>: <a href="mailto:su.advice@northumbria.ac.uk">su.advice@northumbria.ac.uk</a>.</p><p>For extensions, PECs, disability and medical circumstances, and appeals, see the questions under "University regulations and policies" and the Student Portal. You can also change font, size, colours and spacing on this page using <strong>Accessibility settings</strong> at the top.</p>${src('Module Guide and ARTA 2026/27')}`,
+ rel:['portal','extension','pec','adjustments']},
+
+{id:'assess-regs', cat:'support', q:'Where are the assessment regulations?',
+ kw:['assessment regulations','regulations','policies','arta','rules','assessment policy','university policy','guidance for students','academic regulations','regulations for taught awards'],
+ a:()=>`<p>The University's standard rules are the <strong>Academic Regulations for Taught Awards (ARTA) 2026/27</strong> (ref PL077-v001, effective from September 2026). They apply to all students on taught programmes and are reviewed each year. You are expected to be familiar with them. They cover pass marks, compensation, referral, progression, extenuating circumstances, appeals and degree classification, and I've included the main points in my answers.</p>${ul(['<a href="https://www.northumbria.ac.uk/about-us/university-services/student-library-and-academic-services/quality-and-teaching-excellence/assessment/guidance-for-students/" target="_blank" rel="noopener noreferrer">Assessment regulations: guidance for students</a>','<a href="https://library.northumbria.ac.uk/skillsplus/AI-index" target="_blank" rel="noopener noreferrer">Library Skills Plus: ethical and appropriate use of AI</a>','<a href="https://myportal.northumbria.ac.uk/Help-and-support/IT/Artificial-Intelligence/How-you-can-use-AI-tools-in-assessments" target="_blank" rel="noopener noreferrer">Student portal: how you can use AI tools in assessments</a>'])}<p>Programmes can have approved variations (for example for professional body requirements), so check your programme documentation if something specific matters to you. The degree algorithm is under review for students entering in September 2027, which doesn’t change your current rules.</p>${portalNote()}${src('ARTA 2026/27, Module Guide, Assessment Brief and AI Declaration')}`,
+ rel:['portal','misconduct','late']},
+
+{id:'a11y', cat:'support', q:'How do I change the text size, font or colours?',
+ kw:['accessibility','font size','text size','bigger text','larger text','font','dyslexia','dyslexic','bda','british dyslexia association','dyslexia friendly','open sans','colours','colors','contrast','high contrast','dark mode','dark','cream','read aloud','screen reader','spacing','line spacing','change font','easier to read','yellow','visual'],
+ a:()=>`<p>Select <strong>Accessibility settings</strong> at the top right of the page. You can:</p>${ul(['change the text size from 90% to 200%','choose a font from the sans serif list recommended by the British Dyslexia Association: Open Sans, Arial, Verdana, Tahoma, Trebuchet MS, Calibri, Century Gothic or Comic Sans','pick a colour scheme: standard, dark, black on white, white on black, yellow on black, cream, or soft blue','increase letter, word and line spacing','reduce motion','have new answers read aloud automatically (or use "Read aloud" under any answer)'])}<p>Your choices are remembered on this device where your browser allows it.</p>`,
+ rel:['support']},
+
+{id:'about-bot', cat:'support', q:'What can this assistant do?',
+ kw:['what can you do','who are you','are you ai','are you a bot','are you real','how do you work','help me','what is this','about this chatbot','what do you know','can you help'],
+ a:()=>`<p>I'm the ${esc(CONFIG.MODULE_CODE)} module assistant. I answer frequently asked questions using this module's documents (for example the module guide, teaching schedule and assessment brief), the AI declaration and evidence log, the 2026–27 academic calendar, the University's AI guidance for students and the Academic Regulations for Taught Awards (ARTA) 2026/27.</p><p>I'm a set of prepared answers matched to your question, not a person and not generative AI, so I can’t see your timetable, marks or submissions, and I don’t give coursework answers. For anything else, contact ${tutorContact()}.</p>`,
+ rel:['deadline','schedule','ai-rules']},
+
+{id:'portal', cat:'support', q:'Where can I find university-wide guidance and policies?',
+ kw:['student portal','portal','myportal','my portal','policies','policy','university guidance','help and support','anonymous marking policy','managing assessments','emergency scenarios','apprenticeship','apprenticeship policy','my programme'],
+ a:()=>`<p>Current students can use the ${portalLink()} to search for information and guidance on a range of topics, including:</p>${ul(PORTAL_TOPICS)}<p>These apply to every module, so this assistant points you there rather than repeating them. Where the module documents or the University's Academic Regulations for Taught Awards (ARTA) give a short answer, I include it in my other answers.</p><p class="note">You need to be signed in as a current student to use the portal.</p>`,
+ rel:['assess-regs','pec','extension']},
+
+{id:'extension', cat:'regs', q:'How do I ask for an extension?',
+ kw:['extension','extensions','ask extension','request extension','extend deadline','deadline extension','apply extension'],
+ a:()=>`<p>If you miss the agreed deadline <em>without</em> having been granted an extension of time, a late-submission penalty applies (see "What happens if I submit late?").</p><p>Extension requests follow the University's process, which is explained in the Student Portal under <strong>Late submission of work and extension requests</strong>. I can’t grant or advise on individual extensions, and I can’t tell you whether one would be approved.</p><p>If serious personal circumstances affected your ability to complete or perform in an assessment, look at Personal Extenuating Circumstances (PECs) too. Whichever route applies, act as early as you can, ideally before the deadline.</p>${portalNote()}${src('ARTA 2026/27 (1.12) and Student Portal')}`,
+ rel:['late','pec','deadline']},
+
+{id:'pec', cat:'regs', q:'What are Personal Extenuating Circumstances (PECs)?',
+ kw:['ill','sick','ill exam','ill assessment','ill coursework','ill deadline','sick exam','unwell exam','unwell deadline','unwell coursework','pec','pecs','extenuating circumstances','personal extenuating circumstances','extenuating','illness','unwell','bereavement','personal circumstances','affected my performance','deferral','deferred','defer','mitigating circumstances','mitigation','ill health','serious problems'],
+ a:()=>`<p>Personal Extenuating Circumstances (PECs) are serious personal circumstances that you feel may have significantly affected your performance in an exam or other assessment. Under ARTA, <strong>you are responsible for informing the Programme Assessment Board (PAB)</strong> of them, following the University's PEC policy. The policy and how to apply are in the ${portalLink()} under <strong>Personal Extenuating Circumstances (PECs)</strong>.</p><p><strong>What can happen once a PEC is approved</strong> (the Board decides):</p>${tbl(['Your situation','Likely outcome'],[['You made no attempt at the assessment, or the module cannot be compensated','You are deferred: a further uncapped first sit (or, if it was a resit, a further capped resit).'],['You failed the module but it is eligible for compensation','By default you receive a module pass, and the module is removed from your level average and classification. You may ask, by exception, to retake the assessment as a deferral instead.'],['You passed the module','You can choose to retake the affected assessment(s) as a deferral or keep your current marks. If a deferral gives a lower mark, your previous higher mark is kept.']])}<p>The Board doesn’t take personal supporting statements into account when making decisions. I can’t tell you whether your circumstances would be approved. If you are unsure what to do next, contact ${tutorRoleContact()}, your Personal Tutor or ${plContact()}.</p>${src('ARTA 2026/27, section 1.13')}`,
+ rel:['extension','technical-ec','portal']},
+
+{id:'technical-ec', cat:'regs', q:'What if there was a technical problem during my exam or assessment?',
+ kw:['technical problem','technical issue','turnitin problem','turnitin error','turnitin not working','turnitin crashed','blackboard not working','website crashed','system crashed','outage','glitch','technical extenuating circumstances','technical difficulties','turnitin down','blackboard down','system failure','internet failed','exam software','platform crashed','submission problem','could not submit'],
+ a:()=>`<p>Technical extenuating circumstances affecting the conduct of an exam or assessment can affect individual students or whole groups. They are normally considered and resolved <strong>before</strong> the Programme Assessment Board, as part of the marks confirmation process, under the University's Technical Extenuating Circumstances Policy.</p><p>If something goes wrong, tell ${tutorContact()} as soon as you can. The Student Portal also covers <strong>Managing assessments in emergency scenarios</strong>.</p>${portalNote()}${src('ARTA 2026/27, section 1.14')}`,
+ rel:['pec','extension','submit']},
+
+{id:'compensation', cat:'exam', q:'What is compensation for a failed module?',
+ kw:['compensation','compensated','compensate','compensatable','non-compensatable','within 10%','30%','fail a module but still progress','close to pass mark','failed module credit'],
+ a:()=>`<p>Compensation lets you be awarded credit for a failed module, and the module pass mark is recorded. Under ARTA the rules are fixed (not discretionary):</p>${ul(['It is applied at the end of the level of study (or at an approved progression point).','Your module mark must be within 10% of the pass mark, so <strong>30% or above</strong> for modules at level 6 and below.','The total failed credits can’t exceed the maximum that can be compensated (table below).','It can’t be used for modules set as non-compensatable when the programme was validated, and can’t be applied to a 60-credit award.','A module failed because of academic misconduct, or a failed pass/fail module, cannot be compensated.'])}${tbl(['Credits of current learning in the level','Maximum credits that can be compensated'],[['60 or fewer','0'],['More than 60 and fewer than 100','10'],['100 to 120','20'],['More than 120','20, plus 10 for each additional 60 credits over 120 (applied pro rata)']])}<p>On a full-time undergraduate programme, failed modules are referred unless all the failed credits can be compensated. Your Programme Assessment Board applies these rules to your results, so I can’t tell you what would happen in your case.</p>${src('ARTA 2026/27, sections 3.5 and 3.6')}`,
+ rel:['pass-referral','repeat','progression']},
+
+{id:'repeat', cat:'exam', q:'What happens if I fail after my resit (repeating)?',
+ kw:['repeat','repeating','repeat year','repeat the year','repeat module','fail after resit','failed resit','failed my resit','failed referral','repeat with attendance','without attendance','fail the year','15%'],
+ a:()=>`<p>The rules below apply to full-time undergraduate students (and to newly registered part-time and postgraduate students from 2024/25). If you fail after referral and haven’t already repeated, you will normally be offered <strong>one opportunity to repeat</strong> the failed modules or the level.</p>${ul(['<strong>Levels 5, 6 and 7:</strong> you may be eligible if there is evidence of an attempt at at least half the credit in the level, meaning an overall mark of 15% or more in those modules. There’s no minimum level average or number of credits passed.','<strong>Levels 3 and 4:</strong> you can repeat regardless of attempts or credits passed.','<strong>Attendance:</strong> if more than half the credit in the level is passed and you attempted (15% or more) all the failed modules, you can repeat with or without attendance. Otherwise you must repeat with attendance. A final-year project or dissertation must be repeated with attendance. You can’t mix the two within the same semester.','<strong>Marks:</strong> a repeat is completed as if for the first time and normally overwrites earlier attempts. The Programme Assessment Board can exceptionally allow earlier attempts to count if the repeat mark is lower.','If you repeat only the failed modules, you can’t also retake passed modules to improve your classification.'])}<p>If you have not attempted at least half the credits in the level at levels 5, 6 or 7, you will have failed the programme and won’t be offered a repeat. These are complicated situations: talk to ${plContact()} or your Personal Tutor early.</p>${src('ARTA 2026/27, section 3.7')}`,
+ rel:['pass-referral','compensation','progression']},
+
+{id:'progression', cat:'regs', q:'What do I need to progress to the next level?',
+ kw:['progression','progress','progress to next level','move up','next year','trail','trailing','credits needed','120 credits','carry a module','proceed','level 5','level 6'],
+ a:()=>`<p>On a standard full-time Honours degree:</p>${ul(['You progress to level 5 on attaining <strong>120 credits at level 4</strong>, and to level 6 on attaining <strong>120 credits at level 5</strong>.','Modules failed at the first attempt are referred (see the resits question), and some failed modules can be compensated.','Only in exceptional circumstances can the Programme Assessment Board let you <strong>trail</strong> a module, meaning you move up a level while still needing to complete credits from the previous one.','If you are eligible for referral but can’t take it, you can resit at the next scheduled sitting, which normally pauses progression until the level is completed.'])}<p>Part-time programmes, apprenticeships and programmes with an integrated foundation year work slightly differently. Check your programme documentation or ask ${plContact()}.</p>${src('ARTA 2026/27, sections 3.2, 3.6 and 5.11')}`,
+ rel:['pass-referral','compensation','repeat']},
+
+{id:'classification', cat:'regs', q:'How is my degree classified?',
+ kw:['classification','classified','degree','degrees','how is my degree classified','degree classified','degree classification','degree class','first class','2:1','2:2','third class','upper second','lower second','honours','honours degree','degree algorithm','algorithm','weighting','60:40','best 100 credits','borderline','average mark','how is my degree calculated','placement year weighting','level 4 count'],
+ a:()=>`<p>For a standard Honours degree, ARTA sets the classes as:</p>${tbl(['Class','Average mark'],[['First Class Honours','70% or above'],['Second Class Honours, Upper Division (2:1)','at least 60% but less than 70%'],['Second Class Honours, Lower Division (2:2)','at least 50% but less than 60%'],['Third Class Honours','at least 40% but less than 50%']])}${ul(['<strong>How the average is worked out:</strong> whichever is better for you of levels 6 and 5 weighted 60:40, or level 6 only. Level 4 marks aren’t part of the calculation.','<strong>Best 100 credits:</strong> only your best 100 percentage-graded credits at each level count, so the lowest-scoring 20 credits per level are left out. Pass/fail modules are excluded.','<strong>Borderline:</strong> if your average is not more than 2% below a class boundary, you get the higher class if half of all your graded level 6 credits are on or above that boundary. Otherwise you get the lower class. This doesn\'t apply at the fail/third-class boundary.','<strong>Placement year:</strong> a year-long 120-credit level 5 work placement module is not weighted in the classification average.','If you haven\'t attained all 360 credits but have at least 60 level 6 credits, a Pass degree can be awarded.'])}<p class="note">ARTA notes that the degree algorithm is under review for new students entering in September 2027. These are the standard rules, and your programme specification can confirm anything specific to your programme, such as study abroad or professional body variations.</p>${src('ARTA 2026/27, section 5.11')}`,
+ rel:['grades','progression','pass-referral']},
+
+{id:'appeals', cat:'regs', q:'How do I appeal a mark or an assessment decision?',
+ kw:['appeal','appeals','appeal a mark','challenge my mark','complaint','complaints','unhappy with mark','disagree with mark','remark','re-mark','regrade','handbook of student regulations','right of appeal','dispute grade'],
+ a:()=>`<p>You have a <strong>right of appeal</strong> against examination and assessment decisions. The procedures are described in the University's <strong>Handbook of Student Regulations</strong>, which you can reach from the MyNorthumbria web pages. The ${portalLink()} also has a section on <strong>Student appeals and complaints</strong>.</p><p>For independent advice and support, you can contact the Students' Union Advice Team: <a href="mailto:su.advice@northumbria.ac.uk">su.advice@northumbria.ac.uk</a>.</p><p>If you first want to understand your feedback, the portal explains how to act on your module assignment feedback, and you can email ${tutorRoleContact()}.</p>${portalNote()}${src('ARTA 2026/27, section 1.22 and Student Portal')}`,
+ rel:['feedback','support','portal']},
+
+{id:'adjustments', cat:'support', q:'Can I get adjustments to how I am assessed (disability or medical needs)?',
+ kw:['reasonable adjustments','adjustments','disability','disabled','equality act','sap','student accessibility plan','accessibility plan','learning support','extra time exam','medical circumstances','medical condition','long-term condition','neurodiverse','adhd','autism','alteration to assessment'],
+ a:()=>`<p>Exceptionally, you can ask for an alteration to your assessment arrangements under the <strong>Equality Act 2010</strong>. The request goes to the relevant Registrar and takes account of the need to make sure the programme's learning outcomes are met and competence standards aren’t compromised. Any alteration has to be authorised by the relevant Departmental Management Group (DMG).</p><p>The Student Portal has guidance on <strong>Disability and unforeseen medical circumstances</strong>. ARTA also allows an exception to the rule against re-attempting a passed module where there are PECs or a late-recognised Student Accessibility Plan (SAP).</p><p>Contact your Personal Tutor, ${plContact()} or student support as early as you can. I can’t assess or agree adjustments myself.</p>${portalNote()}${src('ARTA 2026/27 (1.11, 2.1) and Student Portal')}`,
+ rel:['support','pec','portal']},
+
+{id:'responsibilities', cat:'regs', q:'What are my responsibilities as a student, and what about illegible handwriting?',
+ kw:['responsibilities','responsibility','my responsibility','handwriting','illegible','legible','messy handwriting','cannot read my writing','handwritten exam','know when work is due','where exams are'],
+ a:()=>`<p>Under ARTA (1.9) you are responsible for:</p>${ul(['attending scheduled classes and carrying out the prescribed learning activities','knowing when work is due to be submitted, and when and where examinations are scheduled'])}<p><strong>Handwriting:</strong> if a marker can’t read your writing, a second academic member of staff will try. If neither can, the work goes to the relevant Registrar (or nominee) to review. If it's still illegible, the indecipherable sections <strong>won’t be marked</strong>, and marks can’t be given for anything that can’t be interpreted. Write clearly in handwritten exams.</p>${src('ARTA 2026/27, section 1.9')}`,
+ rel:['attendance','exam','deadline']},
+
+{id:'chocs', cat:'regs', q:'How do I transfer programme, interrupt my studies or withdraw?',
+ kw:['withdraw','withdrawal','transfer','transfer course','change course','interrupt','interruption','take a break','leave university','drop out','chocs','change of circumstances','switch programme','suspend studies'],
+ a:()=>`<p>Requests to transfer programme, interrupt or withdraw are made through the <strong>online portal</strong> using the Change of Circumstances process (the Student Portal lists the <strong>Student Change of Circumstance Policy (ChoCs)</strong>).</p>${ul(['If you ask to transfer, keep attending and engaging with your current programme until the transfer is formally approved.','You are not normally allowed to transfer if you have both missed the enrolment deadline for the target programme and missed more than two weeks of its teaching.','If you interrupt, you can normally re-enrol within a maximum of two years. After that it is at the Programme Leader\'s discretion.','If you complete the withdrawal process, you are recorded as withdrawn rather than as having failed at the next Programme Assessment Board.'])}<p>Some professional programmes have extra requirements, listed in the Programme Handbook.</p>${portalNote()}${src('ARTA 2026/27, section 1.20')}`,
+ rel:['portal','support']},
+
+{id:'language', cat:'regs', q:'What language are modules taught and assessed in?',
+ kw:['language','english language','taught in english','assessed in english','english policy','language policy','non-native','international student english','ielts'],
+ a:()=>`<p>Under ARTA, all modules contributing to a Northumbria award are taught and assessed in <strong>English</strong>, apart from a few approved exceptions (for example where the subject area is another language). The Student Portal has the <strong>English Language Policy and guidance</strong>.</p>${portalNote()}${src('ARTA 2026/27, section 1.17')}`,
+ rel:['portal','support']}
+];
+
+const KB = MODULE_KB.concat(SHARED_KB);
+const CANNED = {
+  greet: `<p>Hello! I'm the ${CONFIG.MODULE_CODE} module assistant. Ask me a question, or choose one of the suggestions below.</p>`,
+  thanks: `<p>You're welcome. Ask another question any time.</p>`,
+  fallback: `<p>I couldn’t find a good answer to that in the module documents.</p><p>Try rewording it with a few key words (for example "deadline", "labs" or "AI"), or choose a topic from the list. For anything else, contact ${'${TUTOR}'}.</p>`
+};
+
+/* =====================================================================
+   Matching engine
+   ===================================================================== */
+const STOP = new Set('a an the is are am was were be been being do does did doing can could would should will shall i me my mine we our you your it its this that these those of to in on at for from by with about as and or but if then so what whats when where who whom how which why any some there here please tell know want need get gets got have has had may might just also into out up down over under again more most very s t im ive id thats hi hello hey'.split(' '));
+const SYN = {hand:'submit',handin:'submit',upload:'submit',turnitin:'submit',due:'deadline',lecturer:'tutor',teacher:'tutor',professor:'tutor',prof:'tutor',leader:'tutor',mail:'email',e:'email',prac:'lab',practical:'lab',laboratory:'lab',examination:'exam',resit:'referral',retake:'referral',reassessment:'referral',chatgpt:'ai',gpt:'ai',copilot:'ai',claude:'ai',gemini:'ai',llm:'ai',genai:'ai',bb:'blackboard',elp:'blackboard',grade:'mark',tt:'timetable',schedule:'timetable',colour:'color',us:'use',used:'use',dyslexic:'dyslexia',opendyslexic:'dyslexia',assignment:'coursework',submission:'submit',cw:'coursework',extenuating:'extenuate'};
+function stem(w){
+  if (w.length>4 && w.endsWith('ies')) w = w.slice(0,-3)+'y';
+  else if (w.length>3 && w.endsWith('s') && !w.endsWith('ss') && !w.endsWith('us') && !w.endsWith('is')) w = w.slice(0,-1);
+  if (w.length>5 && w.endsWith('ing')) w = w.slice(0,-3);
+  else if (w.length>4 && w.endsWith('ed')) w = w.slice(0,-2);
+  if (w.length>3 && /(.)\1$/.test(w) && !/(ss|ll)$/.test(w)) w = w.slice(0,-1);
+  return SYN[w] || w;
+}
+function tokens(s, keepStop){
+  const n = String(s).toLowerCase().replace(/[’']/g,'').replace(/[^a-z0-9\s/]/g,' ').replace(/\s+/g,' ').trim();
+  if (!n) return [];
+  return n.split(' ').filter(w => keepStop || !STOP.has(w)).map(stem).filter(Boolean);
+}
+let ENTRIES = [];
+function buildEntries(){
+  const custom = loadCustom().map(c => ({id:c.id, cat:c.cat, q:c.q, kw:c.kw, a:()=>plainToHtml(c.a), rel:[], custom:true}));
+  ENTRIES = custom.concat(KB).map(e => ({...e, _kw: e.kw.map(k => tokens(k, true).filter(t=>!STOP.has(t) || /^\d+$/.test(t))).filter(k=>k.length), _qt: tokens(e.q)}));
+}
+function scoreEntry(e, qset){
+  let s = 0; const seen = new Set();
+  for (const k of e._kw){
+    const key = k.slice().sort().join(' ');
+    if (seen.has(key)) continue;           // each distinct keyword counts once
+    if (k.every(t => qset.has(t))){ seen.add(key); s += 3*k.length + (k.length>1 ? 2 : 0); }
+  }
+  for (const t of e._qt) if (qset.has(t)) s += 1;
+  if (e.custom && s>0) s += 3;
+  return s;
+}
+function findAnswers(query){
+  const qset = new Set(tokens(query));
+  return ENTRIES.map(e => ({e, s: scoreEntry(e, qset)})).filter(r => r.s > 0).sort((a,b) => b.s - a.s);
+}
+
+/* =====================================================================
+   Chat UI
+   ===================================================================== */
+const log = $('#log'), input = $('#askInput');
+let settings = {size:100, font:'standard', theme:'light', spacing:'normal', motion:false, speak:false};
+const reduceMotion = () => settings.motion || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canSpeak = 'speechSynthesis' in window;
+
+function speak(text){
+  if (!canSpeak) return;
+  if (speechSynthesis.speaking){ speechSynthesis.cancel(); return; }
+  const u = new SpeechSynthesisUtterance(text); u.lang = 'en-GB'; speechSynthesis.speak(u);
+}
+function chipsHTML(label, ids){
+  const items = ids.map(id => ENTRIES.find(e => e.id === id)).filter(Boolean);
+  if (!items.length) return '';
+  return `<p class="chips-label">${label}</p><div class="chips">${items.map(e => `<button type="button" class="chip" data-id="${esc(e.id)}">${esc(e.q)}</button>`).join('')}</div>`;
+}
+function scrollToMsg(el){
+  const top = el.offsetTop - 6;
+  log.scrollTo({top: Math.max(0, top), behavior: reduceMotion() ? 'auto' : 'smooth'});
+}
+function addUser(text){
+  const m = document.createElement('article'); m.className = 'msg user';
+  m.innerHTML = `<p class="who">You</p><div class="bubble">${esc(text)}</div>`;
+  log.appendChild(m); scrollToMsg(m);
+}
+function addBot(html, opts = {}){
+  const m = document.createElement('article'); m.className = 'msg bot';
+  m.innerHTML = `<p class="who">Module assistant</p><div class="bubble">${html}</div>` +
+    (opts.chips || '') +
+    (canSpeak && !opts.noTools ? `<div class="msgtools"><button type="button" class="tool" data-act="speak">Read aloud</button></div>` : '');
+  log.appendChild(m);
+  scrollToMsg(m);
+  if (settings.speak && canSpeak){ speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance($('.bubble', m).textContent); u.lang = 'en-GB'; speechSynthesis.speak(u); }
+  return m;
+}
+function respondWith(entry, others){
+  const html = typeof entry.a === 'function' ? entry.a() : entry.a;
+  let chips = '';
+  if (others && others.length) chips += chipsHTML('You might also be asking:', others);
+  const rel = (entry.rel || []).filter(id => !(others||[]).includes(id));
+  if (rel.length) chips += chipsHTML('Related questions:', rel.slice(0,3));
+  addBot(html, {chips});
+}
+function ask(text, forcedId){
+  text = text.trim(); if (!text) return;
+  addUser(text);
+  const go = () => {
+    if (forcedId){ const e = ENTRIES.find(x => x.id === forcedId); if (e) return respondWith(e); }
+    const t = tokens(text, true);
+    const joined = t.join(' ');
+    if (t.length <= 4 && /^(hi|hello|hey|hiya)\b|^good (morning|afternoon|evening)\b|^(morning|afternoon|evening)$/.test(joined)) return addBot(CANNED.greet, {chips: chipsHTML('Try one of these:', POPULAR.slice(0,4)), noTools:true});
+    if (t.length <= 4 && /^(thank|thanks|cheers|ta|brilliant|great|perfect)\b/.test(joined)) return addBot(CANNED.thanks, {noTools:true});
+    const res = findAnswers(text);
+    if (!res.length || res[0].s < 3){
+      logUnanswered(text);
+      const near = res.slice(0,3).map(r => r.e.id);
+      const html = CANNED.fallback.replace('${TUTOR}', esc(CONFIG.TUTOR_NAME) + ' (' + mail() + ')') + '<p>University-wide policies and guidance are in the ' + portalLink() + '.</p>' + (CONFIG.FEEDBACK_URL ? '<p>Missing something? <a href="' + esc(CONFIG.FEEDBACK_URL) + '" target="_blank" rel="noopener noreferrer">Tell the module team what to add</a>.</p>' : '');
+      return addBot(html, {chips: near.length ? chipsHTML('Did you mean one of these?', near) : chipsHTML('Popular questions:', POPULAR.slice(0,4))});
+    }
+    const top = res[0];
+    const others = res.slice(1,3).filter(r => r.s >= 5 && r.s >= top.s*0.7).map(r => r.e.id);
+    respondWith(top.e, others);
+  };
+  if (reduceMotion()) go();
+  else {
+    const t = document.createElement('article'); t.className = 'msg bot'; t.innerHTML = '<p class="who">Module assistant</p><div class="bubble typing">Looking that up…</div>';
+    log.appendChild(t);
+    setTimeout(() => { t.remove(); go(); }, 300);
+  }
+}
+function welcome(){
+  log.innerHTML = '';
+  addBot(`<h3>Welcome to ${esc(CONFIG.MODULE_CODE)} ${esc(CONFIG.MODULE_TITLE)}</h3><p>I can answer questions about sessions and labs, coursework tasks, deadlines, marking, the exam and the rules on using AI. I use the module documents, so I can’t give coursework answers or see your personal timetable.</p><p>Type a question below, or choose one:</p>`,
+    {chips: `<div class="chips">${WELCOME_CHIPS.map(id => { const e = ENTRIES.find(x=>x.id===id); return e ? `<button type="button" class="chip" data-id="${e.id}">${esc(e.q)}</button>` : ''; }).join('')}</div>`, noTools:true});
+  log.scrollTop = 0;
+}
+function renderSidebar(){
+  $('#popular').innerHTML = POPULAR.map(id => { const e = ENTRIES.find(x=>x.id===id); return e ? `<li><button type="button" class="linkbtn" data-id="${e.id}">${esc(e.q)}</button></li>` : ''; }).join('');
+  const cats = CATS.map(c => {
+    const items = ENTRIES.filter(e => e.cat === c.id);
+    if (!items.length) return '';
+    return `<details class="topic"><summary>${esc(c.name)}</summary><ul>${items.filter(e=>e.id!=='boundary').map(e => `<li><button type="button" class="linkbtn" data-id="${esc(e.id)}">${esc(e.q)}</button></li>`).join('')}</ul></details>`;
+  }).join('');
+  $('#topics').innerHTML = cats;
+}
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-id]');
+  if (b && (b.classList.contains('chip') || b.classList.contains('linkbtn'))){
+    const e = ENTRIES.find(x => x.id === b.dataset.id);
+    if (e){ ask(e.q, e.id); input.focus({preventScroll:true}); }
+  }
+  const s = ev.target.closest('[data-act="speak"]');
+  if (s){ const m = s.closest('.msg'); speak($('.bubble', m).textContent); }
+});
+$('#askForm').addEventListener('submit', ev => { ev.preventDefault(); const v = input.value; input.value = ''; ask(v); });
+$('#clearBtn').addEventListener('click', () => { if (canSpeak) speechSynthesis.cancel(); welcome(); input.focus(); });
+
+/* unanswered log */
+function logUnanswered(q){
+  const list = readJSON('unanswered', []);
+  const found = list.find(x => x.q.toLowerCase() === q.toLowerCase());
+  if (found) found.n++; else list.push({q: q.slice(0,300), n:1, t: new Date().toISOString()});
+  store.set('unanswered', JSON.stringify(list.slice(-200)));
+}
+
+/* =====================================================================
+   Accessibility settings
+   ===================================================================== */
+const FONTS = [['standard','Standard','"Segoe UI", Arial, sans-serif'],['opensans','Open Sans','"Open Sans", Arial, sans-serif'],['arial','Arial','Arial, sans-serif'],['verdana','Verdana','Verdana, sans-serif'],['tahoma','Tahoma','Tahoma, sans-serif'],['trebuchet','Trebuchet MS','"Trebuchet MS", sans-serif'],['calibri','Calibri','Calibri, Carlito, sans-serif'],['centurygothic','Century Gothic','"Century Gothic", sans-serif'],['comic','Comic Sans','"Comic Sans MS", "Comic Neue", sans-serif']];
+const THEMES = [['light','Standard','#FFFFFF','#14213D'],['dark','Dark','#172033','#E8EEF9'],['hcwhite','Black on white','#FFFFFF','#000000'],['hcblack','White on black','#000000','#FFFFFF'],['yellowblack','Yellow on black','#000000','#FFE600'],['cream','Cream','#FFF9E3','#262626'],['blue','Soft blue','#EAF3FC','#0B2540']];
+const SPACINGS = [['normal','Standard'],['wide','Wide'],['wider','Extra wide']];
+function radioGroup(container, name, items, current, render){
+  container.innerHTML = items.map(it => `<div class="opt"><input type="radio" name="${name}" id="${name}-${it[0]}" value="${it[0]}" ${it[0]===current?'checked':''}><label for="${name}-${it[0]}">${render(it)}</label></div>`).join('');
+}
+function buildA11yControls(){
+  radioGroup($('#fontOpts'), 'font', FONTS, settings.font, f => `<span style="font-family:${f[2]}">${f[1]}</span>`);
+  radioGroup($('#themeOpts'), 'theme', THEMES, settings.theme, t => `<span class="swatch" style="background:${t[2]};color:${t[3]}" aria-hidden="true">Aa</span>${t[1]}`);
+  radioGroup($('#spacingOpts'), 'spacing', SPACINGS, settings.spacing, s => s[1]);
+  $('#optMotion').checked = settings.motion; $('#optSpeak').checked = settings.speak;
+  $('#sizeRange').value = settings.size;
+}
+function applySettings(){
+  const h = document.documentElement;
+  h.style.setProperty('--scale', settings.size/100);
+  h.dataset.font = settings.font; h.dataset.theme = settings.theme; h.dataset.spacing = settings.spacing;
+  h.dataset.motion = settings.motion ? 'off' : 'on';
+  $('#sizeOut').textContent = 'Text size: ' + settings.size + '%';
+  $('#sizeRange').setAttribute('aria-valuetext', settings.size + ' percent');
+  store.setG('settings', JSON.stringify(settings));
+}
+function initSettings(){
+  let saved = null; try { const g = store.getG('settings'); saved = g ? JSON.parse(g) : readJSON('settings', null); } catch(e){}
+  if (saved) settings = {...settings, ...saved};
+  else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) settings.theme = 'dark';
+  if (!FONTS.some(f => f[0] === settings.font)) settings.font = 'opensans';   // older saved choices (e.g. OpenDyslexic) move to Open Sans
+  buildA11yControls(); applySettings();
+  $('#fontOpts').addEventListener('change', e => { settings.font = e.target.value; applySettings(); });
+  $('#themeOpts').addEventListener('change', e => { settings.theme = e.target.value; applySettings(); });
+  $('#spacingOpts').addEventListener('change', e => { settings.spacing = e.target.value; applySettings(); });
+  $('#optMotion').addEventListener('change', e => { settings.motion = e.target.checked; applySettings(); });
+  $('#optSpeak').addEventListener('change', e => { settings.speak = e.target.checked; if(!settings.speak && canSpeak) speechSynthesis.cancel(); applySettings(); });
+  const setSize = v => { settings.size = Math.min(200, Math.max(90, v)); $('#sizeRange').value = settings.size; applySettings(); };
+  $('#sizeRange').addEventListener('input', e => setSize(+e.target.value));
+  $('#sizeDown').addEventListener('click', () => setSize(settings.size - 10));
+  $('#sizeUp').addEventListener('click', () => setSize(settings.size + 10));
+  $('#a11yReset').addEventListener('click', () => { settings = {size:100, font:'standard', theme:'light', spacing:'normal', motion:false, speak:false}; buildA11yControls(); applySettings(); });
+  const btn = $('#a11yBtn'), panel = $('#a11yPanel');
+  const toggle = open => { panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); if (open) $('#a11yTitle').scrollIntoView({block:'nearest'}); };
+  btn.addEventListener('click', () => toggle(panel.hidden));
+  $('#a11yClose').addEventListener('click', () => { toggle(false); btn.focus(); });
+  panel.addEventListener('keydown', e => { if (e.key === 'Escape'){ toggle(false); btn.focus(); } });
+  if (!canSpeak) $('#optSpeak').closest('label').hidden = true;
+}
+
+/* =====================================================================
+   Hero decoration: STR electropherogram peaks (seeded, static)
+   ===================================================================== */
+function loadWebFonts(){
+  if (!CONFIG.LOAD_WEB_FONTS) return;
+  const l = document.createElement('link'); l.rel = 'stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap';
+  document.head.appendChild(l);
+}
+function drawPeaks(){
+  const svg = $('#peaks'); let seed = 20260927;
+  const rnd = () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296;
+  const cols = ['#3B82F6','#22C55E','#EAB308','#EF4444'];
+  let out = '';
+  cols.forEach((c, ci) => {
+    const n = 7 + Math.floor(rnd()*3);
+    const peaks = Array.from({length:n}, (_,i) => ({x: (i + .3 + rnd()*.6) * (1200/n), h: 14 + rnd()*44, w: 5 + rnd()*5}));
+    let d = 'M0 80';
+    for (let x = 0; x <= 1200; x += 4){
+      let y = 0; peaks.forEach(p => { y += p.h * Math.exp(-Math.pow(x - p.x, 2) / (2*p.w*p.w)); });
+      d += ` L${x} ${(80 - 2 - y - ci*.6).toFixed(1)}`;
+    }
+    out += `<path d="${d}" fill="none" stroke="${c}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>`;
+  });
+  svg.innerHTML = out;
+}
+
+/* Header decoration: a row of laboratory equipment standing on the bottom edge of the header.
+   Drawn as line art in the header text colour, with a little coloured liquid. Each item is drawn
+   around (0,0) = bottom centre, and the row is rebuilt to fit the window width. */
+const LAB = {
+  petri:      {w:56, draw:c => `<rect x="-24" y="-8" width="48" height="8" rx="2"/><rect x="-24" y="-17" width="48" height="8" rx="2"/><rect x="-24" y="-26" width="48" height="8" rx="2"/><rect x="-21" y="-6" width="42" height="4" fill="${c}" fill-opacity=".5" stroke="none"/>`},
+  rack:       {w:92, draw:c => [-30,-10,10,30].map((x,i) => { const col = ['#3B82F6','#22C55E','#EAB308','#EF4444'][(i + (c.length)) % 4]; return `<path d="M${x-6} -62 V-6 a6 6 0 0 0 12 0 V-62"/><path d="M${x-6} -${30+i*4} V-6 a6 6 0 0 0 12 0 V-${30+i*4} Z" fill="${col}" fill-opacity=".45" stroke="none"/>`; }).join('') + `<rect x="-42" y="-40" width="84" height="5" rx="1"/><path d="M-42 -40 V0 M42 -40 V0"/>`},
+  flask:      {w:56, draw:c => `<path d="M-7 -62 V-42 L-24 0 H24 L7 -42 V-62"/><path d="M-10 -62 H10"/><path d="M-16.7 -18 L16.7 -18 L24 0 H-24 Z" fill="${c}" fill-opacity=".45" stroke="none"/><path d="M-16.7 -18 H16.7"/>`},
+  beaker:     {w:46, draw:c => `<path d="M-18 -50 V0 H18 V-50"/><path d="M-21 -52 H21"/><path d="M-18 -38 h8 M-18 -26 h8 M-18 -14 h8"/><rect x="-17" y="-30" width="34" height="29" fill="${c}" fill-opacity=".4" stroke="none"/><path d="M-17 -30 H17"/>`},
+  microscope: {w:88, draw:c => `<path d="M-32 0 H32 V-8 H-32 Z"/><path d="M16 -8 V-30"/><path d="M16 -30 C40 -34 40 -66 12 -76"/><g transform="rotate(-24 -4 -62)"><rect x="-11" y="-84" width="14" height="40" rx="2"/><rect x="-9" y="-94" width="10" height="10" rx="1"/><rect x="-8" y="-44" width="8" height="10" rx="1"/></g><path d="M-26 -22 H12"/><path d="M-22 -26 H6" stroke-width="4"/><circle cx="25" cy="-22" r="5"/><path d="M-12 -8 V-22"/>`},
+  pipette:    {w:38, draw:c => `<rect x="-5" y="-78" width="10" height="10" rx="2"/><path d="M-2 -78 V-84 H2 V-78"/><path d="M-9 -68 H9 V-38 L4 -26 H-4 L-9 -38 Z"/><rect x="-4" y="-60" width="8" height="9" rx="1"/><path d="M9 -54 H14 V-40"/><path d="M-3 -26 L-1.2 0 H1.2 L3 -26"/><path d="M-1.2 -8 L1.2 -8 L1.2 0 H-1.2 Z" fill="${c}" fill-opacity=".6" stroke="none"/>`},
+  spectro:    {w:92, draw:c => `<rect x="-42" y="-34" width="84" height="34" rx="3"/><rect x="-14" y="-42" width="28" height="8" rx="2"/><rect x="-5" y="-54" width="10" height="14" rx="1"/><rect x="-4" y="-47" width="8" height="6" fill="${c}" fill-opacity=".6" stroke="none"/><rect x="-35" y="-27" width="32" height="15" rx="2"/><path d="M-32 -16 l7 -5 l6 7 l7 -9 l5 6"/><circle cx="23" cy="-17" r="6"/>`},
+  glasses:    {w:76, draw:c => `<rect x="-34" y="-30" width="30" height="21" rx="10" fill="${c}" fill-opacity=".18"/><rect x="4" y="-30" width="30" height="21" rx="10" fill="${c}" fill-opacity=".18"/><path d="M-4 -22 H4 M-34 -24 L-40 -15 M34 -24 L40 -15"/>`},
+  magnifier:  {w:46, draw:c => `<circle cx="-4" cy="-52" r="17" fill="${c}" fill-opacity=".14"/><path d="M-13 -58 A10 10 0 0 1 -4 -64"/><path d="M5 -37 L24 0" stroke-width="4"/>`},
+  book:       {w:74, draw:c => `<path d="M-35 -2 V-40 Q-18 -47 0 -38 Q18 -47 35 -40 V-2 Q18 -9 0 0 Q-18 -9 -35 -2 Z" fill="${c}" fill-opacity=".14"/><path d="M0 -38 V0"/><path d="M-27 -30 Q-16 -33 -7 -29 M-27 -21 Q-16 -24 -7 -20 M-27 -12 Q-16 -15 -7 -11 M27 -30 Q16 -33 7 -29 M27 -21 Q16 -24 7 -20 M27 -12 Q16 -15 7 -11"/>`},
+  stack:      {w:64, draw:c => `<rect x="-29" y="-13" width="58" height="13" rx="1"/><rect x="-25" y="-26" width="52" height="13" rx="1" fill="${c}" fill-opacity=".3"/><rect x="-27" y="-39" width="46" height="13" rx="1"/><path d="M-21 -13 V0 M-17 -26 V-13 M-19 -39 V-26"/><path d="M-12 -6.5 H20 M-8 -19.5 H18"/>`},
+  laptop:     {w:88, draw:c => `<rect x="-31" y="-52" width="62" height="40" rx="3"/><path d="M-20 -20 V-28 M-10 -20 V-38 M0 -20 V-32 M10 -20 V-43 M20 -20 V-36" stroke-width="4"/><path d="M-39 -10 H39 L35 0 H-35 Z"/><rect x="-20" y="-28" width="8" height="8" fill="${c}" fill-opacity=".45" stroke="none"/>`},
+  clip:       {w:48, draw:c => `<rect x="-19" y="-58" width="38" height="58" rx="3"/><rect x="-8" y="-63" width="16" height="9" rx="2"/><path d="M-11 -40 H11 M-11 -30 H11 M-11 -20 H3"/><path d="M5 -17 L9 -13 L15 -22" stroke="${c}" stroke-width="2.5"/>`},
+  poster:     {w:64, draw:c => `<rect x="-24" y="-68" width="48" height="56" rx="2"/><path d="M-17 -60 H17 M-17 -52 H4"/><rect x="-17" y="-44" width="19" height="14" rx="1" fill="${c}" fill-opacity=".3"/><path d="M6 -44 H17 M6 -38 H17 M6 -32 H17 M-17 -24 H17 M-17 -18 H9"/><path d="M-14 -12 L-24 0 M14 -12 L24 0 M0 -12 V0"/>`},
+  cap:        {w:64, draw:c => `<path d="M-32 -34 L0 -48 L32 -34 L0 -20 Z" fill="${c}" fill-opacity=".2"/><path d="M-17 -27 V-12 Q0 -2 17 -12 V-27"/><path d="M32 -34 V-16"/><circle cx="32" cy="-13" r="3"/>`}
+};
+function drawLab(svg, hero, mode){
+  const W = Math.max(320, hero.clientWidth), gap = 28, margin = 24;
+  const seq = mode === 'research'
+    ? ['book','magnifier','microscope','flask','laptop','clip','poster','stack','rack','cap','pipette','beaker','book']
+    : ['petri','rack','flask','beaker','microscope','pipette','spectro','glasses','magnifier','flask','rack','beaker','pipette','petri'];
+  const used = []; let total = 0;
+  for (const k of seq){ const w = LAB[k].w; if (used.length && total + gap + w > W - 2*margin) break; total += (used.length ? gap : 0) + w; used.push(k); }
+  const cols = ['#3B82F6','#22C55E','#EAB308','#EF4444'];
+  let x = (W - total) / 2, out = '';
+  used.forEach((k,i) => { const w = LAB[k].w; out += '<g transform="translate(' + (x + w/2).toFixed(1) + ',99)">' + LAB[k].draw(cols[i % 4]) + '</g>'; x += w + gap; });
+  svg.setAttribute('viewBox', '0 0 ' + W + ' 100');
+  svg.setAttribute('preserveAspectRatio', 'xMidYMax meet');
+  svg.style.height = '100px';
+  svg.innerHTML = '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + out + '</g>';
+}
+let heroTimer;
+function drawHero(){
+  const svg = $('#peaks'), hero = $('.hero'), wrap = $('.hero .wrap'), mode = CONFIG.HERO_ART || 'peaks';
+  if (mode === 'none'){ svg.style.display = 'none'; wrap.style.paddingBottom = '2rem'; return; }
+  if (mode === 'lab' || mode === 'research'){
+    wrap.style.paddingBottom = '7.4rem';
+    drawLab(svg, hero, mode);
+    window.addEventListener('resize', () => { clearTimeout(heroTimer); heroTimer = setTimeout(() => drawLab(svg, hero, mode), 150); });
+    return;
+  }
+  drawPeaks();
+}
+
+/* =====================================================================
+   Custom FAQs + Admin
+   ===================================================================== */
+function loadCustom(){
+  const saved = readJSON('custom_faqs', null);
+  const base = Array.isArray(saved) ? saved : CUSTOM_FAQS_DEFAULT;
+  return base.filter(c => c && c.q && c.a).map(c => ({id: c.id || ('c' + Math.random().toString(36).slice(2,8)), cat: c.cat || 'support', q: String(c.q), kw: Array.isArray(c.kw) ? c.kw.map(String) : String(c.kw||'').split(',').map(s=>s.trim()).filter(Boolean), a: String(c.a)}));
+}
+function saveCustom(list){ store.set('custom_faqs', JSON.stringify(list)); }
+const dlg = $('#adminDlg');
+let adminAttempts = 0, adminLockedUntil = 0;
+function openAdmin(){
+  $('#adminPanel').hidden = true; $('#codeForm').hidden = false; $('#codeInput').value = ''; $('#codeMsg').textContent = '';
+  if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+  $('#codeInput').focus();
+}
+function closeAdmin(){ $('#adminPanel').hidden = true; if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); $('#adminBtn').focus(); }
+$('#adminBtn').addEventListener('click', openAdmin);
+$('#adminClose').addEventListener('click', closeAdmin);
+dlg.addEventListener('close', () => { $('#adminPanel').hidden = true; });
+$('#codeForm').addEventListener('submit', ev => {
+  ev.preventDefault();
+  const msg = $('#codeMsg'), now = Date.now();
+  if (now < adminLockedUntil){ msg.className = 'msgline err'; msg.textContent = 'Too many attempts. Wait ' + Math.ceil((adminLockedUntil-now)/1000) + ' seconds and try again.'; return; }
+  if ($('#codeInput').value === CONFIG.ADMIN_CODE && CONFIG.ADMIN_CODE){
+    adminAttempts = 0; msg.textContent = ''; $('#codeForm').hidden = true; $('#adminPanel').hidden = false;
+    $('#defaultCodeWarn').hidden = CONFIG.ADMIN_CODE !== 'CHANGE-ME';
+    const pc = placeholderCount(); $('#placeholderWarn').hidden = !pc; $('#placeholderWarn').textContent = pc ? pc + ' item(s) still contain placeholder text (see the banner at the top of the page).' : '';
+    renderAdmin(); $('#h-add').scrollIntoView({block:'nearest'});
+  } else {
+    adminAttempts++; msg.className = 'msgline err';
+    if (adminAttempts >= 5){ adminLockedUntil = now + 60000; adminAttempts = 0; msg.textContent = 'Too many attempts. Try again in 60 seconds.'; }
+    else msg.textContent = 'That code is not correct.';
+    $('#codeInput').select();
+  }
+});
+function fillCatSelect(){ $('#cfCat').innerHTML = CATS.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join(''); }
+function renderAdmin(){
+  fillCatSelect();
+  const list = loadCustom();
+  const cl = $('#customList'); cl.innerHTML = '';
+  if (!list.length) cl.innerHTML = '<li>No added questions yet.</li>';
+  list.forEach(c => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="q"></span><span class="a"></span><span class="row"><button type="button" class="btn" data-edit="${esc(c.id)}">Edit</button><button type="button" class="btn" data-del="${esc(c.id)}">Delete</button></span>`;
+    $('.q', li).textContent = c.q; $('.a', li).textContent = 'Keywords: ' + (c.kw.join(', ') || 'none');
+    cl.appendChild(li);
+  });
+  const ul_ = $('#unansList'); ul_.innerHTML = '';
+  const un = readJSON('unanswered', []).sort((a,b)=>b.n-a.n);
+  if (!un.length) ul_.innerHTML = '<li>Nothing recorded yet.</li>';
+  un.forEach((u,i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="q"></span><span class="row"><button type="button" class="btn" data-use="${i}">Turn into a question</button></span>`;
+    $('.q', li).textContent = u.q + (u.n>1 ? ` (asked ${u.n} times)` : '');
+    ul_.appendChild(li);
+  });
+  $('#annInput').value = store.get('announcement') ?? CONFIG.ANNOUNCEMENT;
+}
+function refreshAfterChange(){ buildEntries(); renderSidebar(); renderAdmin(); }
+function clearForm(){ $('#faqForm').reset(); $('#cfId').value = ''; $('#cfSave').textContent = 'Save question'; }
+$('#cfCancel').addEventListener('click', () => { clearForm(); $('#cfMsg').textContent = ''; });
+$('#faqForm').addEventListener('submit', ev => {
+  ev.preventDefault();
+  const list = loadCustom(), id = $('#cfId').value || ('c' + Date.now().toString(36));
+  const item = {id, q: $('#cfQ').value.trim(), kw: $('#cfKw').value.split(',').map(s=>s.trim()).filter(Boolean), cat: $('#cfCat').value, a: $('#cfA').value.trim()};
+  if (!item.q || !item.a) return;
+  if (!item.kw.length) item.kw = [item.q];
+  const i = list.findIndex(x => x.id === id);
+  if (i >= 0) list[i] = item; else list.push(item);
+  saveCustom(list); clearForm(); refreshAfterChange();
+  $('#cfMsg').textContent = 'Saved. Students on this browser will see it straight away.';
+});
+$('#customList').addEventListener('click', ev => {
+  const ed = ev.target.closest('[data-edit]'), del = ev.target.closest('[data-del]');
+  const list = loadCustom();
+  if (ed){
+    const c = list.find(x => x.id === ed.dataset.edit); if (!c) return;
+    $('#cfId').value = c.id; $('#cfQ').value = c.q; $('#cfKw').value = c.kw.join(', '); $('#cfCat').value = c.cat; $('#cfA').value = c.a;
+    $('#cfSave').textContent = 'Update question'; $('#cfQ').focus(); $('#cfMsg').textContent = 'Editing "' + c.q + '".';
+  }
+  if (del){
+    const c = list.find(x => x.id === del.dataset.del);
+    if (c && confirm('Delete this question?\n\n' + c.q)){ saveCustom(list.filter(x => x.id !== c.id)); refreshAfterChange(); $('#cfMsg').textContent = 'Deleted.'; }
+  }
+});
+$('#unansList').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-use]'); if (!b) return;
+  const un = readJSON('unanswered', []).sort((a,b)=>b.n-a.n)[+b.dataset.use]; if (!un) return;
+  clearForm(); $('#cfQ').value = un.q; $('#cfKw').value = un.q; $('#cfQ').focus(); $('#cfMsg').textContent = 'Add an answer and save.';
+});
+$('#unansClear').addEventListener('click', () => { store.del('unanswered'); renderAdmin(); });
+function placeholderCount(){
+  const TOKEN = '[[' + 'REPLACE';   // built in two pieces so a search for the token only finds real placeholders
+  const has = v => String(v).indexOf(TOKEN) !== -1;
+  let n = 0;
+  Object.keys(CONFIG).forEach(k => { if (has(CONFIG[k])) n++; });
+  ENTRIES.forEach(e => { try { const t = e.q + ' ' + (typeof e.a === 'function' ? e.a() : e.a); if (has(t)) n++; } catch(err){} });
+  return n;
+}
+const showBanner = () => {
+  const n = placeholderCount();
+  let t = (store.get('announcement') ?? CONFIG.ANNOUNCEMENT).trim();
+  if (n) t = 'Set-up not finished: ' + n + ' item' + (n === 1 ? '' : 's') + ' still contain placeholder text. Search the file for the double square bracket followed by the word REPLACE and fill each one in. This message disappears once they are all done.';
+  $('#banner').hidden = !t; $('#bannerText').textContent = t;
+};
+$('#annSave').addEventListener('click', () => { store.set('announcement', $('#annInput').value.trim()); showBanner(); $('#annMsg').textContent = 'Banner saved.'; });
+$('#exMake').addEventListener('click', () => { $('#exBox').value = JSON.stringify(loadCustom(), null, 2); $('#exMsg').textContent = 'Export ready.'; });
+$('#exCopy').addEventListener('click', async () => {
+  const box = $('#exBox'); if (!box.value) box.value = JSON.stringify(loadCustom(), null, 2);
+  try { await navigator.clipboard.writeText(box.value); $('#exMsg').textContent = 'Copied to clipboard.'; }
+  catch(e){ box.select(); $('#exMsg').textContent = 'Press Ctrl+C (or Cmd+C) to copy the selected text.'; }
+});
+$('#exImport').addEventListener('click', () => {
+  try {
+    const data = JSON.parse($('#exBox').value);
+    if (!Array.isArray(data)) throw new Error('not a list');
+    saveCustom(data.filter(c => c && c.q && c.a)); refreshAfterChange(); $('#exMsg').textContent = 'Imported ' + data.length + ' question(s).';
+  } catch(e){ $('#exMsg').textContent = 'That text is not valid export data.'; }
+});
+
+/* =====================================================================
+   Start-up
+   ===================================================================== */
+function initConfigText(){
+  document.querySelectorAll('[data-cfg]').forEach(el => { const v = CONFIG[el.dataset.cfg]; if (v !== undefined) el.textContent = v; });
+  $('#mailLink').href = mailto(CONFIG.TUTOR_EMAIL, CONFIG.MODULE_CODE + ' module query');
+  $('#portalSide').href = CONFIG.PORTAL_URL;
+  document.title = CONFIG.MODULE_CODE + ' ' + CONFIG.MODULE_TITLE + ' – Module Assistant';
+}
+loadWebFonts();
+buildEntries();
+initConfigText();
+initSettings();
+drawHero();
+renderSidebar();
+showBanner();
+welcome();
+</script>
+</body>
+</html>
